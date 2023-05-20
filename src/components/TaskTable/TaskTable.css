@@ -1,0 +1,164 @@
+/* task table */
+table#TaskTable {
+   width: 100%;
+   max-width: 1000px;
+   height: min-content;
+   border-spacing: 0;
+   margin-bottom: 1em;
+}
+
+#TaskTable p {
+   margin: 0;
+   line-height: 2em;
+}
+
+table#TaskTable tr > td {
+   text-align: justify;
+}
+
+table#TaskTable tr > td p {
+   margin-left: .75em;
+}
+
+/* thead */
+table#TaskTable > thead > tr {
+   background: #FCFCFC;
+}
+
+table#TaskTable > thead > tr > td {
+   padding: 0 10px 0 10px;
+   height: 2em;
+   min-height: 30px;
+   transition: .3s ease-in-out;
+}
+
+table#TaskTable > thead > tr > td {
+   border-bottom: 4px solid transparent;
+}
+
+table#TaskTable > thead > tr > td:hover {
+   color: var(--no-toil-green-dark);
+   background: whitesmoke;
+}
+
+table#TaskTable > thead > tr > td.sortedBy {
+   border-color: var(--no-toil-green-dark);
+   border-width: 4px;
+   color: var(--no-toil-green-dark);
+   background: #f1f6f1bb;
+}
+
+table#TaskTable > thead > tr > td.sortedBy:hover {
+   border-color: var(--no-toil-green-dark);
+   color: var(--no-toil-green-dark);
+   background: #d3edd3bb;
+}
+
+/* tbody */
+table#TaskTable > tbody > tr {
+   transition: all .3s ease-in-out;
+}
+
+table#TaskTable > tbody > tr > td {
+   border-top: 1px solid gray;
+}
+
+table#TaskTable > tbody > tr:nth-child(even) {
+   background: whitesmoke;
+}
+
+table#TaskTable > tbody > tr:not(.AccordionRow):not(#updateExpanded):hover,
+table#TaskTable > tbody > tr:not(.AccordionRow):not(#updateExpanded):nth-child(even):hover {
+   background: #01b20131;
+}
+
+table#TaskTable > tbody > tr:not(.AccordionRow):not(#updateExpanded):hover button,
+table#TaskTable > tbody > tr:not(.AccordionRow):not(#updateExpanded):nth-child(even):hover button {
+   background: #01b20150;
+   border: 1px solid green;
+   transition: all .3s ease-in-out;
+}
+
+table#TaskTable > tbody > tr.NoTasks > td {
+   height: 50px;
+   background: rgba(164, 164, 164, 0.127);
+}
+
+/* updateExpanded (the row with the accordion row below it) */
+table#TaskTable > tbody > tr#updateExpanded,
+table#TaskTable > tbody > tr#updateExpanded:nth-child(even) {
+   background: rgba(137, 225, 137, 0.274);
+}
+
+table#TaskTable > tbody > tr#updateExpanded button,
+table#TaskTable > tbody > tr#updateExpanded:nth-child(even) button {
+   background: rgba(137, 225, 137, 0.5);
+}
+
+/* accordion row */
+table#TaskTable > tbody > tr.AccordionRow,
+table#TaskTable > tbody > tr.AccordionRow:nth-child(even) {
+   background: transparent;
+   border: 1px solid gray;
+   border-top: none;
+}
+
+/* title column expands horizontally */
+table#TaskTable tr > td:nth-child(1) {
+   width: 100%;
+   /* padding-left: .5em; */
+   text-align: left;
+}
+
+/* columns */
+
+/* update */
+table#TaskTable > tbody > tr > td.Update {
+   display: flex;
+   place-content: space-between;
+   place-items: center;
+}
+
+table#TaskTable > tbody > tr > td.Update > button {
+   transition: .3s ease-in-out;
+   border-radius: 10em;
+   width: 2em;
+   height: 2em;
+   padding: 0;
+   margin: 0;
+   margin-top: .2em;
+   margin-bottom: .2em;
+}
+
+/* status */
+#TaskTable > tbody > tr > td.Status > a > button {
+   padding-left: 1em;
+   padding-right: 1em;
+   padding-top: 4px;
+   padding-bottom: 4px;
+   z-index: 1;
+}
+
+/* media queries */
+@media (prefers-color-scheme: dark) {
+   table#TaskTable > thead > tr > td.sortedBy {
+      background: #10101050;
+   }
+
+   table#TaskTable > thead > tr > td.sortedBy:hover {
+      background: rgba(9, 47, 9, 0.89);
+   }
+
+   table#TaskTable > thead > tr,
+   table#TaskTable > tbody > tr:nth-child(even),
+   #TaskTable > tbody > tr.NoTasks > td,
+   table#TaskTable > thead > tr > td:hover {
+      background: #35353550;
+   }
+
+   .AccordionRow > td {
+      background: #202020;
+      border-left: 1px solid #80808050;
+      border-right: 1px solid #80808050;
+   }
+}

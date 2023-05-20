@@ -1,0 +1,39 @@
+footer {
+   --padding: 1em;
+   width: calc(100vw - calc(2 * var(--padding)));
+   max-width: 1000px;
+   padding: var(--padding);
+   border-top: 1px solid whitesmoke;
+}
+
+button.BackToTopButton {
+   --side-length: 3em;
+   display: inline-block;
+   padding: 0;
+   padding-top: -5px;
+   padding-left: -5px;
+   margin: 4px 2px;
+   width: var(--side-length);
+   height: var(--side-length);
+   font-size: calc(var(--side-length) * .35);
+   font-weight: bolder;
+   text-align: center;
+   text-decoration: none;
+   border: none;
+   border-radius: 50%;
+   background: buttonface;
+}
+
+button.BackToTopButton:hover {
+   background: var(--no-toil-green-dark);
+   border: 1px solid green;
+   color: green;
+   transition: all .3s ease-in-out;
+}
+
+@media (prefers-color-scheme: dark) {
+   button.BackToTopButton {
+      color: white;
+      border: 1px solid gray;
+   }
+}

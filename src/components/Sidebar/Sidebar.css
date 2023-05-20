@@ -1,0 +1,61 @@
+#Sidebar {
+   /* override vars */
+   --width: 225px;
+   height: calc(100vh - 2em);
+   /* color */
+   background: buttonface;
+   border-right: 1px solid lightgray;
+   box-shadow: 0 0 1em buttonface;
+}
+
+#Sidebar div a button,
+#Sidebar #CloseSidebarButton {
+   background: #fcfcfcfc;
+   border: 1px solid lightgray;
+   transition: all .3s ease-in-out;
+}
+
+#Sidebar div a:hover button,
+#Sidebar #CloseSidebarButton:hover {
+   background: var(--no-toil-green);
+   border: 1px solid var(--no-toil-green-dark);
+}
+
+#Sidebar h2 {
+   text-align: left;
+   color: var(--no-toil-orange-dark);
+   transition: color .3s ease-in-out;
+}
+
+#Sidebar h2:hover {
+   color: var(--no-toil-green-dark);
+}
+
+#Sidebar #FirestoreSidebarLink {
+   margin-top: auto;
+   color: var(--no-toil-orange-dark);
+   transition: color .3s ease-in-out;
+}
+
+#Sidebar #FirestoreSidebarLink:hover {
+   color: var(--no-toil-green-dark);
+}
+
+@media (prefers-color-scheme: dark) {
+   #Sidebar {
+      background: #252525;
+      border-right: 1px solid black;
+      box-shadow: 0 0 1em #00000050;
+   }
+
+   #Sidebar div a:hover button,
+   #Sidebar #CloseSidebarButton:hover {
+      background: var(--no-toil-green-dark);
+   }
+
+   #Sidebar div a button,
+   #Sidebar #CloseSidebarButton {
+      background: #707070fc;
+      border: 1px solid darkgray;
+   }
+}

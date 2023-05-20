@@ -1,0 +1,201 @@
+/************************************************************
+ * IMPORT
+ ************************************************************/
+/* Ubuntu Font */
+@import url("https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap");
+/* Open Sans */
+@import url("https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500;1,600;1,700;1,800&display=swap");
+/* Oswald */
+@import url("https://fonts.googleapis.com/css2?family=Oswald:wght@200;300;400;500;600;700&display=swap");
+
+/************************************************************
+ * DEFINE/GLOBAL
+ ************************************************************/
+:root {
+   --no-toil-green: #7af468;
+   --no-toil-green-dark: #4ba85c;
+   --cyan: #5183a4;
+   --no-toil-orange: #ffba5a;
+   --no-toil-orange-dark: #9a5822;
+   --off-black: #242424;
+
+   --color-light: black;
+   --color-dark: whitesmoke;
+   --color-link-light: var(--cyan);
+   --color-link-dark: var(--cyan);
+   --background-light: white;
+   --background-dark: var(--off-black);
+
+   font-family: "Open Sans", sans-serif;
+   line-height: 1.5;
+   font-weight: 400;
+
+   color-scheme: light dark;
+   color: var(--color-light);
+   background-color: var(--background-light);
+
+   font-synthesis: none;
+   text-rendering: optimizeLegibility;
+   -webkit-font-smoothing: antialiased;
+   -moz-osx-font-smoothing: grayscale;
+   -webkit-text-size-adjust: 100%;
+
+   -webkit-touch-callout: var(--cyan);
+   -webkit-focus-ring-color: var(--no-toil-green-dark);
+   -webkit-tap-highlight-color: transparent;
+}
+
+html, body, #root, #App, #Page {
+   min-height: 100vh;
+   width: 100vw;
+   overflow-x: hidden;
+}
+
+@media (max-width: 318px) {
+   html, body, #root, #App, #Page, header, footer {
+      width: 100%;
+      overflow-x: auto;
+   }
+}
+
+#root {
+   width: 100%;
+}
+
+div {
+   display: flex;
+   flex-flow: column;
+   place-content: top;
+   place-items: space-between;
+}
+
+span {
+   display: flex;
+   flex-flow: row wrap;
+   place-content: space-between;
+   place-items: top;
+}
+
+ol, ul, li {
+   list-style: none;
+   padding-left: 0;
+}
+
+a {
+   font-weight: 500;
+   color: var(--cyan);
+   text-decoration: inherit;
+}
+
+a:hover {
+   color: var(--no-toil-orange-dark);
+}
+
+body {
+   margin: 0;
+   display: flex;
+   flex-direction: column;
+   min-width: 320px;
+   min-height: 100vh;
+}
+
+main {
+   flex: 1 0 auto;
+   min-height: 100%;
+}
+
+h1, h2, h3, h4, h5, h6 {
+   font-family: "Oswald", sans-serif;
+   padding: 0;
+   margin: 0;
+   text-transform: uppercase;
+}
+
+h1 {
+   font-size: 3.2em;
+   line-height: 1.1;
+}
+
+h2 {
+   font-size: 2.2em;
+   line-height: 1.1;
+}
+
+button {
+   border-radius: 8px;
+   border: 1px solid transparent;
+   padding: 0.6em 1.2em;
+   font-size: 1em;
+   font-weight: 500;
+   font-family: inherit;
+   cursor: pointer;
+   transition: border-color 0.3s ease-in-out;
+   transition: background 0.3s ease-in-out;
+}
+
+footer {
+   margin-top: auto;
+   padding: 1em;
+   font-family: "Oswald", sans-serif;
+   font-weight: bolder;
+   letter-spacing: .05em;
+   background: transparent;
+   color: black;
+}
+
+footer nav {
+   display: grid;
+   grid-template-columns: repeat(4, 1fr);
+   gap: 1em;
+   flex-grow: 0;
+   margin-bottom: 2em;
+}
+
+footer nav button {
+   width: 100%;
+   font-size: 16px;
+}
+
+.BackToTopButton {
+   background: transparent;
+   color: black;
+   transition: all .3s ease-in-out;
+}
+
+.BackToTopButton:hover {
+   background: rgba(137, 201, 144, 0.667);
+   color: green;
+   border-color: green;
+}
+
+.disable-text-selection {
+   -moz-user-select:none; /* firefox */
+   -webkit-user-select: none; /* Safari */
+   -ms-user-select: none; /* IE*/
+   user-select: none; /* Standard syntax */
+}
+
+.squishy-letters {
+   transform: scaleX(105%);
+   letter-spacing: -.06em;
+}
+
+/* mobile */
+@media (max-width: 400px) {
+   footer nav {
+      grid-template-columns: repeat(1, 1fr);
+   }
+}
+/* tablet */
+@media (max-width: 800px) {
+   footer nav {
+      grid-template-columns: repeat(2, 1fr);
+   }
+}
+
+@media (prefers-color-scheme: dark) {
+   :root, html, body {
+      color: var(--color-dark);
+      background-color: var(--background-dark);
+   }
+}

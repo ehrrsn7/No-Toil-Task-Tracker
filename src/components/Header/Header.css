@@ -1,0 +1,49 @@
+header {
+   border-bottom: 1px solid whitesmoke;
+   box-shadow: 0 4px 12px -2px whitesmoke;
+}
+
+header #Title {
+   transition: .3s ease-in-out;
+   margin: .5em;
+   text-align: center;
+   vertical-align: center;
+}
+
+@media (max-width: 250px) {
+   header {
+      width: 100%;
+      overflow-x: scroll;
+   }
+}
+
+@media (prefers-color-scheme: dark) {
+   header {
+      box-shadow: 0 4px 12px -2px black;
+      border-color: black;
+   }
+
+   header > img {
+      filter: brightness(0);
+      filter: invert(1);
+   }
+
+   header .Title {
+      margin: .25em;
+      margin-left: 1.75em;
+   }
+}
+
+@media print {
+   button {
+      display: none;
+   }
+
+   header {
+      box-shadow: none;
+   }
+
+   header .Title {
+      margin-left: 0;
+   }
+}

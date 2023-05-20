@@ -1,0 +1,24 @@
+{
+   "main": "server.js",
+   "type": "module",
+   "author": "Elijah Harrison <ehrrsn7@gmail.com>",
+   "license": "MIT",
+   "repository": {
+      "type": "git",
+      "url": "https://github.com/ehrrsn7/ejhfotos.com.git"
+   },
+   "scripts": {
+      "install": "npm install ehrrsn7-components",
+      "server": "node ."
+   },
+   "dependencies": {
+      "ehrrsn7-components": "^0.0.1-patch-21",
+      "express": "^4.18.2",
+      "express-subdomain": "^1.0.5",
+      "http-proxy-middleware": "^2.0.6",
+      "open": "^9.1.0",
+      "os": "^0.1.2",
+      "path": "^0.12.7",
+      "process": "^0.11.10"
+   }
+}

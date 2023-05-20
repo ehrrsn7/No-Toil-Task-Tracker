@@ -1,0 +1,33 @@
+/* The whole application */
+#App {
+   width: 100vw;
+   min-height: 100vh;
+}
+
+/* The application not including the absolute content, like the sidebar */
+.Page {
+   min-height: 100%;
+   flex: 1 0 auto;
+   flex-direction: column;
+}
+
+/* The page, not including the header or the footer */
+main {
+   width: calc(100% - 2em);
+   margin-bottom: auto;
+   padding: 1em;
+}
+
+footer {
+   max-width: 1000px;
+   margin: auto;
+   margin-left: 0;
+}
+
+footer > div > nav {
+   width: calc(100% - 2em);
+}
+
+#Footer button > * {
+   user-select: none;
+}
