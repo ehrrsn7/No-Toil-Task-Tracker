@@ -37,3 +37,5 @@ Something we didn't implement before (because of the stylesheets mess) was toast
 ## Potential bugs
 
 Since we are just doing a quick port from the old ui to the new with these changes without thorough testing, I am going ahead and marking this as a beta release. We will host this server alongside the other for testing in case we need to roll back.
+
+## TODO: post screenshots demonstrating the stack here.
