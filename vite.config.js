@@ -5,7 +5,9 @@ import react from "@vitejs/plugin-react-swc"
 // https://vitejs.dev/config/
 export default defineConfig({
    plugins: [react()],
-   base: "/no-toil-task-tracker/",
+   build: {
+      outDir: 'docs'
+   },
    server: {
       // host: "0.0.0.0",
       watch: {
@@ -13,7 +15,7 @@ export default defineConfig({
       },
       host: true, // needed for the Docker Container port mapping to work
       strictPort: true,
-      manifest: true,
+      // manifest: true,
    },
    resolve: {
       alias: [
