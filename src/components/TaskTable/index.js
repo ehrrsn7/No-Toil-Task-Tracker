@@ -1,13 +1,12 @@
-export {
-   motionVariants,
-   AccordionRow,
-   cards,
-} from "./AccordionRow"
+export { AccordionRow } from "./AccordionRow"
 
 export {
    TaskTable,
-   dummyRows,
-   statusMapNameToNumber,
-   statusMapNumberToName,
-   filterFunctions,
 } from "./TaskTable"
+
+export { TaskRow } from "./TaskRow"
+
+export {
+   Paginator,
+   SearchAndNavigateBar,
+} from "./Paginator"

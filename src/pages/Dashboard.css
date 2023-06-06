@@ -1,9 +1,19 @@
+nav.AddMore {
+   width: calc(100% - 2em);
+   padding: 1em 0;
+   gap: 1em;
+   display: grid;
+   grid-template-columns: repeat(3, 1fr);
+   margin-bottom: unset;
+}
+
 table#AddMore {
-   width: 100%;
+   width: calc(100% - 2em);
+   /* padding: 0 1em; */
    max-width: 1000px;
    min-width: 500px;
-   padding: 2em 0;
    border-spacing: 0;
+   margin: unset;
 }
 
 table#AddMore tr > td {

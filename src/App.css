@@ -2,6 +2,7 @@
 #App {
    width: 100vw;
    min-height: 100vh;
+   transition: margin-left .3s ease-in-out;
 }
 
 /* The application not including the absolute content, like the sidebar */
@@ -18,16 +19,8 @@ main {
    padding: 1em;
 }
 
-footer {
-   max-width: 1000px;
-   margin: auto;
-   margin-left: 0;
-}
-
-footer > div > nav {
-   width: calc(100% - 2em);
-}
-
-#Footer button > * {
-   user-select: none;
+@media print {
+   #App {
+      margin-left: 0 !important;
+   }
 }

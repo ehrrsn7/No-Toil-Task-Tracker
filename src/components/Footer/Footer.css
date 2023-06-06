@@ -1,9 +1,28 @@
 footer {
    --padding: 1em;
-   width: calc(100vw - calc(2 * var(--padding)));
-   max-width: 1000px;
+   width: 100vw;
+   max-width: unset !important;
+   margin-top: auto;
+   padding: 1em;
    padding: var(--padding);
-   border-top: 1px solid whitesmoke;
+   border-top: 1px solid rgba(200, 200, 200, 0.5);
+   background: transparent;
+   font-family: "Oswald", sans-serif;
+   letter-spacing: .05em;
+   font-weight: bolder;
+}
+
+footer nav {
+   display: grid;
+   grid-template-columns: repeat(4, 1fr);
+   gap: 1em;
+   flex-grow: 0;
+   margin-bottom: 2em;
+}
+
+footer nav button {
+   width: 100%;
+   font-size: 16px;
 }
 
 button.BackToTopButton {
@@ -31,9 +50,28 @@ button.BackToTopButton:hover {
    transition: all .3s ease-in-out;
 }
 
+footer nav.AddMore,
+footer nav#PageLinks,
+footer nav#StatusNavigation {
+   padding: 1em 0;
+   margin-bottom: unset;
+   width: calc(100% - 2em);
+   max-width: 1000px;
+}
+
+footer nav#StatusNavigation {
+   grid-template-columns: repeat(3, 1fr);
+}
+
 @media (prefers-color-scheme: dark) {
    button.BackToTopButton {
       color: white;
       border: 1px solid gray;
+   }
+}
+
+@media print {
+   footer {
+      display: none;
    }
 }

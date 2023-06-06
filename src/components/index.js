@@ -1,13 +1,14 @@
 export { Header } from "./Header"
 export { Footer } from "./Footer"
 export { Sidebar } from "./Sidebar"
-export { ErrorBoundary } from "./ErrorBoundary"
 export {
-   TaskTable,
+   AddMore,
+   ToggleAddMoreButton
+} from "./AddMore"
+export {
    AccordionRow,
-   motionVariants,
-   cards, dummyRows,
-   statusMapNameToNumber,
-   statusMapNumberToName,
-   filterFunctions,
+   TaskTable,
+   TaskRow,
+   Paginator,
+   SearchAndNavigateBar,
 } from "./TaskTable"

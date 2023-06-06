@@ -23,8 +23,12 @@
    --color-dark: whitesmoke;
    --color-link-light: var(--cyan);
    --color-link-dark: var(--cyan);
-   --background-light: white;
-   --background-dark: var(--off-black);
+   --background-light: #ffffff;
+   --background-light-secondary: #fefefe;
+   --background-light-tertiary: #ffffff;
+   --background-dark: #292a2f;
+   --background-dark-secondary: #202126;
+   --background-dark-tertiary: #393a3f;
 
    font-family: "Open Sans", sans-serif;
    line-height: 1.5;
@@ -56,6 +60,10 @@ html, body, #root, #App, #Page {
       width: 100%;
       overflow-x: auto;
    }
+}
+
+* {
+   word-wrap: break-word;
 }
 
 #root {
@@ -91,6 +99,14 @@ a:hover {
    color: var(--no-toil-orange-dark);
 }
 
+input {
+   padding-left: 4px;
+}
+
+input::placeholder {
+   font-style: italic;
+}
+
 body {
    margin: 0;
    display: flex;
@@ -103,6 +119,7 @@ main {
    flex: 1 0 auto;
    min-height: 100%;
 }
+
 
 h1, h2, h3, h4, h5, h6 {
    font-family: "Oswald", sans-serif;
@@ -131,29 +148,11 @@ button {
    cursor: pointer;
    transition: border-color 0.3s ease-in-out;
    transition: background 0.3s ease-in-out;
+   user-select: none;
 }
 
-footer {
-   margin-top: auto;
-   padding: 1em;
-   font-family: "Oswald", sans-serif;
-   font-weight: bolder;
-   letter-spacing: .05em;
-   background: transparent;
-   color: black;
-}
-
-footer nav {
-   display: grid;
-   grid-template-columns: repeat(4, 1fr);
-   gap: 1em;
-   flex-grow: 0;
-   margin-bottom: 2em;
-}
-
-footer nav button {
-   width: 100%;
-   font-size: 16px;
+button:disabled {
+   cursor: default;
 }
 
 .BackToTopButton {
@@ -197,5 +196,19 @@ footer nav button {
    :root, html, body {
       color: var(--color-dark);
       background-color: var(--background-dark);
+   }
+
+   button {
+      background: var(--background-dark-tertiary);
+   }
+
+   button:disabled {
+      background: var(--background-dark-secondary);
+   }
+}
+
+@media print {
+   button, .hide-on-print {
+      display: none;
    }
 }

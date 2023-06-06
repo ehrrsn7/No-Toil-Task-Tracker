@@ -4,21 +4,22 @@ import { ToastContainer } from "react-toastify"
 import { SidebarContext, useInitializer } from "ehrrsn7-components"
 import { Sidebar } from "@components"
 import Pages from "@pages"
+import { authorizeFirebaseUI } from "./firebase/firebaseUI"
 import "./App.css"
 
 export function App() {
-   const { sidebarMarginLeft, setShowSidebar } = React.useContext(SidebarContext)
+   const { setShowSidebar } = React.useContext(SidebarContext)
+   const { sidebarMarginLeft } = React.useContext(SidebarContext)
 
    useInitializer(() => {
       closeSidebarOnPageClick(setShowSidebar)
       closeSidebarOnEscPress(setShowSidebar)
+
+      authorizeFirebaseUI()
    })
 
    return <div id="App"
-   style={{
-      marginLeft: sidebarMarginLeft,
-      transition: ".3s margin-left ease-in-out"
-   }}>
+   style={{ marginLeft: sidebarMarginLeft }}>
       <Routes>
 			<Route path="/" element={<Pages.Dashboard />} />
 			<Route path="/Dashboard" element={

@@ -1,0 +1,70 @@
+.Paginator {
+   place-items: center;
+   width: calc(100% - 2em);
+   max-width: 1000px;
+}
+
+/* paginator */
+.pagination {
+   --padding: 1em;
+   --green: rgb(0, 91, 0);
+   display: flex;
+   place-content: center;
+   gap: .45em;
+   border-top: 1px solid rgba(200, 200, 200, 0.5);
+   border-bottom: 1px solid rgba(200, 200, 200, 0.5);
+   width: calc(100% - 2 * var(--padding));
+   padding: var(--padding);
+}
+
+.pagination .page-item {
+   border-radius: .25em;
+   transition: color .3s ease-in-out, background .3s ease-in-out;
+}
+
+.pagination .page-link {
+   border: 1px solid green;
+   font-family: "Oswald", sans-serif;
+   color: green;
+   text-transform: uppercase;
+   font-weight: 500;
+   user-select: none;
+}
+
+.pagination .active .page-link {
+   background: green;
+   color: #fff;
+   border: 1px solid green;
+}
+
+.pagination .page-item:hover:not(.active):not(.disabled) > .page-link {
+   color: var(--green);
+   background: rgba(182, 223, 182, 0.274);
+   border: 1px solid var(--green);
+}
+
+li.page-item.disabled {
+   border: none;
+   margin: 0;
+}
+
+@media (prefers-color-scheme: dark) {
+   .pagination .page-item.active .page-link {
+      color: white;
+   }
+
+   .pagination .page-link {
+      color: white;
+      background: rgba(0, 60, 0, 0.3);
+   }
+
+   .pagination .page-item:hover:not(.active):not(.disabled) > .page-link {
+      color: white;
+      background: var(--green);
+   }
+
+   .pagination .page-item.disabled .page-link {
+      background: none;
+      border-color: gray;
+   }
+}

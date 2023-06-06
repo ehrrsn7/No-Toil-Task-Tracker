@@ -1,8 +1,10 @@
 /* task table */
 table#TaskTable {
+   --row-height: 50px;
    width: 100%;
    max-width: 1000px;
    height: min-content;
+   min-height: 330px;
    border-spacing: 0;
    margin-bottom: 1em;
 }
@@ -23,6 +25,7 @@ table#TaskTable tr > td p {
 /* thead */
 table#TaskTable > thead > tr {
    background: #FCFCFC;
+   user-select: none;
 }
 
 table#TaskTable > thead > tr > td {
@@ -30,9 +33,6 @@ table#TaskTable > thead > tr > td {
    height: 2em;
    min-height: 30px;
    transition: .3s ease-in-out;
-}
-
-table#TaskTable > thead > tr > td {
    border-bottom: 4px solid transparent;
 }
 
@@ -56,15 +56,18 @@ table#TaskTable > thead > tr > td.sortedBy:hover {
 
 /* tbody */
 table#TaskTable > tbody > tr {
+   max-height: var(--row-height);
    transition: all .3s ease-in-out;
 }
 
 table#TaskTable > tbody > tr > td {
+   max-height: var(--row-height);
    border-top: 1px solid gray;
 }
 
 table#TaskTable > tbody > tr:nth-child(even) {
    background: whitesmoke;
+   max-height: var(--row-height);
 }
 
 table#TaskTable > tbody > tr:not(.AccordionRow):not(#updateExpanded):hover,
@@ -79,9 +82,19 @@ table#TaskTable > tbody > tr:not(.AccordionRow):not(#updateExpanded):nth-child(e
    transition: all .3s ease-in-out;
 }
 
+table#TaskTable > tbody > tr:not(.AccordionRow):not(#updateExpanded) button:disabled,
+table#TaskTable > tbody > tr:not(.AccordionRow):not(#updateExpanded):hover button:disabled {
+   border-color: transparent;
+}
+
 table#TaskTable > tbody > tr.NoTasks > td {
-   height: 50px;
+   max-height: var(--row-height);
    background: rgba(164, 164, 164, 0.127);
+}
+
+table#TaskTable tr.filler-row {
+   max-height: unset;
+   height: 100%;
 }
 
 /* updateExpanded (the row with the accordion row below it) */
@@ -153,7 +166,7 @@ table#TaskTable > tbody > tr > td.Update > button {
    table#TaskTable > tbody > tr:nth-child(even),
    #TaskTable > tbody > tr.NoTasks > td,
    table#TaskTable > thead > tr > td:hover {
-      background: #35353550;
+      background: #222329;
    }
 
    .AccordionRow > td {

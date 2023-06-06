@@ -1,61 +1,91 @@
 #Sidebar {
    /* override vars */
    --width: 225px;
+   /* styling */
    height: calc(100vh - 2em);
-   /* color */
-   background: buttonface;
-   border-right: 1px solid lightgray;
-   box-shadow: 0 0 1em buttonface;
+   border-right-style: solid;
+   border-right-width: 1px;
+   padding: 1em;
+   user-select: none;
 }
 
 #Sidebar div a button,
 #Sidebar #CloseSidebarButton {
-   background: #fcfcfcfc;
-   border: 1px solid lightgray;
-   transition: all .3s ease-in-out;
-}
-
-#Sidebar div a:hover button,
-#Sidebar #CloseSidebarButton:hover {
-   background: var(--no-toil-green);
-   border: 1px solid var(--no-toil-green-dark);
+   transition: all .2s ease-in-out;
 }
 
 #Sidebar h2 {
    text-align: left;
-   color: var(--no-toil-orange-dark);
-   transition: color .3s ease-in-out;
-}
-
-#Sidebar h2:hover {
-   color: var(--no-toil-green-dark);
+   transition: color .2s ease-in-out;
 }
 
 #Sidebar #FirestoreSidebarLink {
    margin-top: auto;
-   color: var(--no-toil-orange-dark);
-   transition: color .3s ease-in-out;
+   transition: color .2s ease-in-out;
 }
 
-#Sidebar #FirestoreSidebarLink:hover {
-   color: var(--no-toil-green-dark);
+#Sidebar div a:hover button,
+#Sidebar #CloseSidebarButton:hover {
+   border-style: solid;
+   border-width: 1px;
 }
 
-@media (prefers-color-scheme: dark) {
+/************************************************************
+ * Colors
+ ************************************************************/
+#Sidebar h2:hover,
+#Sidebar #FirestoreSidebarLink:hover,
+#Sidebar div a:hover button,
+#Sidebar #CloseSidebarButton:hover,
+#Sidebar .SidebarLink-Selected > a > button {
+   color: green;
+}
+
+@media (prefers-color-scheme: light) {
    #Sidebar {
-      background: #252525;
-      border-right: 1px solid black;
-      box-shadow: 0 0 1em #00000050;
+      background: buttonface;
+      border-right: 1px solid lightgray;
+      box-shadow: 0 0 1em buttonface;
+   }
+
+   #Sidebar h2,
+   #Sidebar #FirestoreSidebarLink {
+      color: black;
    }
 
    #Sidebar div a:hover button,
-   #Sidebar #CloseSidebarButton:hover {
-      background: var(--no-toil-green-dark);
+   #Sidebar #CloseSidebarButton:hover,
+   #Sidebar .SidebarLink-Selected > a > button {
+      border-color: green;
    }
 
    #Sidebar div a button,
    #Sidebar #CloseSidebarButton {
-      background: #707070fc;
-      border: 1px solid darkgray;
+      background: #fcfcfcfc;
+      border-color: buttonface;
    }
+}
+
+@media (prefers-color-scheme: dark) {
+   #Sidebar {
+      border-color: #15151580;
+      box-shadow: 0 0 1em #15151580;
+   }
+
+   #Sidebar h2,
+   #Sidebar #FirestoreSidebarLink,
+   #Sidebar div a:hover button,
+   #Sidebar #CloseSidebarButton:hover {
+      color: white;
+   }
+
+   #Sidebar div a:hover button,
+   #Sidebar #CloseSidebarButton:hover,
+   #Sidebar .SidebarLink-Selected > a > button {
+      background: green;
+   }
+}
+
+@media print {
+   #Sidebar { display: none; }
 }

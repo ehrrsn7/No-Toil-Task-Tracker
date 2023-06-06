@@ -10,6 +10,10 @@ header #Title {
    vertical-align: center;
 }
 
+#Time h5 {
+   letter-spacing: .015em;
+}
+
 @media (max-width: 250px) {
    header {
       width: 100%;
@@ -19,8 +23,8 @@ header #Title {
 
 @media (prefers-color-scheme: dark) {
    header {
-      box-shadow: 0 4px 12px -2px black;
-      border-color: black;
+      box-shadow: 0 0 .5em #151515D0;
+      border-color: #15151580;
    }
 
    header > img {
@@ -35,15 +39,15 @@ header #Title {
 }
 
 @media print {
-   button {
-      display: none;
-   }
-
    header {
       box-shadow: none;
    }
 
-   header .Title {
-      margin-left: 0;
+   header #Title {
+      margin-left: .5em !important;
+   }
+
+   header button {
+      display: none;
    }
 }

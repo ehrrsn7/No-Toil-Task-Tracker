@@ -4,6 +4,7 @@ import {
    SidebarContext, ToggleSidebarButton,
    Header as HeaderComponent, useInitializer
 } from "ehrrsn7-components"
+import { OneTapLogin } from "../../firebase/firebaseUI"
 import { Context } from "@contexts"
 import "./Header.css"
 
@@ -22,22 +23,29 @@ const components = {
    Mobile: ({children}) => {
       const { showSidebar } = React.useContext(SidebarContext)
 
-      return <span>
-         <ToggleSidebarButton style={{
-            opacity: showSidebar ? 0 : 1,
-            transition: "opacity 0.3s ease-in-out",
-            margin: "1em",
-            position: "absolute"
-         }} />
-         <h2 id="Title" className="squishy-letters" style={{marginLeft: showSidebar ? "1em" : "2.5em"}}>
-            {children}
-         </h2>
-      </span>
+      return <div style={{width: "100%"}}>
+         <span style={{padding: "1em 1em 0 1em", placeItems: "center"}}>
+            <ToggleSidebarButton style={{
+               opacity: showSidebar ? 0 : 1,
+               transition: "opacity 0.3s ease-in-out",
+            }} />
+
+            <Status />
+
+            login
+         </span>
+         <span style={{ width: "100%", placeContent: "center" }}>
+            <h2 id="Title" className="squishy-letters"
+            style={{textAlign: "center", marginTop: ".3em"}}>
+               {children}
+            </h2>
+         </span>
+      </div>
    },
 
    NotMobile: ({ children }) => {
       const { showSidebar } = React.useContext(SidebarContext)
-      const tablet = useMedia("(max-width: 650px)")
+      // const tablet = useMedia("(max-width: 650px)")
       const dark = useMedia("(prefers-color-scheme: dark)")
 
       return <span style={{flexWrap: "nowrap", width: "100%"}}>
@@ -62,7 +70,11 @@ const components = {
             flexWrap: "nowrap",
             color: dark ? "white" : "#505050"
          }}>
-            { !tablet && <Status style={{ padding: "1em" }} /> }
+            { <Status style={{ padding: "1em" }} /> }
+            <div style={{gap: 10, padding: 10}}>
+               <OneTapLogin />
+               login
+            </div>
          </span>
       </span>
    },
@@ -70,34 +82,46 @@ const components = {
 
 export function Time() {
    const [ time, setTime ] = React.useState(new Date())
-   useInitializer(() => {
-      const interval = setInterval(() => setTime(new Date()), 1000)
-      return () => clearInterval(interval)
-   })
-   return <>
-      { time.toDateString() }<br />
-      { time.toLocaleTimeString() }<br />
-   </>
+
+   const handleTime = () => { setInterval(() => setTime(new Date()), 1100) }
+
+   useInitializer(handleTime)
+
+   return <div id="Time">
+      <h5 style={{padding: "unset"}}>{ time.toDateString() }</h5>
+      <h5 style={{padding: "unset"}}>{ time.toLocaleTimeString() }</h5>
+   </div>
+}
+
+export function Connected() {
+   const { connected } = React.useContext(Context)
+
+   if (connected == null)
+      return <h4 id="Connected" style={{color: "gray"}}
+      className="Connecting hide-on-print squishy-letters">
+         Connecting...
+      </h4>
+
+   else if (!connected)
+      return <h4 id="Connected" style={{color: "red"}}
+      className="NotConnected hide-on-print squishy-letters">
+         Not Connected
+      </h4>
+
+   else // connected
+      return <h4 id="Connected" style={{color: "green"}}
+      className="hide-on-print squishy-letters">
+         Connected
+      </h4>
 }
 
 export function Status({ style }) {
-   const { connected } = React.useContext(Context)
-   const h4Style = {
-      margin: 0, padding: 0, color: "green", transform: "scaleX(115%)"
-   }
-   return <div style={{
+   return <div id="Status" style={{
       fontSize: "11px", marginTop: "auto", marginBottom: "auto",
       ...style
    }}>
       <Time />
-      { connected ?
-         <h4 className="squishy-letters" style={h4Style}>
-            Connected
-         </h4> :
-         <h4 className="squishy-letters" style={h4Style}>
-            Not Connected
-         </h4>
-      }
+      <Connected />
    </div>
 }
 
