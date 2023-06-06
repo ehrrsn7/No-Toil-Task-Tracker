@@ -23,12 +23,20 @@ concurrency:
 
 jobs:
   # Single deploy job since we're just deploying
-  deploy:
+  build-and-deploy:
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
+      - name: Set up Node.js version
+        uses: actions/setup-node@v1
+        with:
+          node-version: '19.x'
+      - name: npm install, build, and test
+        run: |
+          npm install
+          npm run build  # I want to deploy the folder that this command generates! 
       - name: Checkout
         uses: actions/checkout@v3
       - name: Setup Pages
@@ -37,7 +45,7 @@ jobs:
         uses: actions/upload-pages-artifact@v1
         with:
           # Upload entire repository
-          path: '.'
+          path: './dist'
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v2
