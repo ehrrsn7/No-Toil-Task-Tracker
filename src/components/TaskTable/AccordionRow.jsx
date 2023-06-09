@@ -134,7 +134,7 @@ export function MoreInfo({ row }) {
          render: `Pushing changes to tasks['${row.Title}']`,
          autoClose: 3000
       })
-      
+
       // update task here
       update({id, Title, Quantity, Status,
          Description, LastModified,
@@ -157,7 +157,7 @@ export function MoreInfo({ row }) {
             })
          })
    }
-   
+
    if (!row)
       throw "In MoreInfo(row): row is undefined."
 
@@ -433,20 +433,22 @@ export function Update({ row }) {
    }
 
    const onUpdateClick = () => {
-      if (row.Status == 5) {
-         console.log("Status is already complete. Do not update.")
-      }
-      else if (Quantity == 0) {
-         console.log("nothing to update")
-      }
-      else if (Quantity == row.Quantity) {
-         console.log("update the whole task")
-         update({...row, Status: row.Status + 1})
-      }
+      // don't update status past completed -- that's out of bounds
+      if (row.Status == 5) return
+
+      // nothing to update
+      if (Quantity == 0) return
+
+      // update the whole task
+      else if (Quantity == row.Quantity)
+         update({ ...row, Status: row.Status + 1 })
+
+      // update certain Quantity:
+      //    create new task with new quantity:
+      //    row.Quantity - Quantity
+      //    and leave it
+      //    then update what's left
       else if (Quantity < row.Quantity) {
-         console.log(
-            "update Quantity, create new task with new quantity == row.Quantity - Quantity and leave it, then update the rest"
-         )
          const thisTask = {
             ...row,
             Status: row.Status + 1,
@@ -459,9 +461,7 @@ export function Update({ row }) {
             Quantity: row.Quantity - Quantity,
             LastModified: new Date(),
          }
-         console.log("posting", leftOver)
          post("tasks", leftOver)
-         console.log("updating", thisTask)
          update(thisTask)
       }
       else if (Quantity > row.Quantity) {
@@ -519,10 +519,37 @@ export function Discard({ row }) {
    }
 
    const onDiscardClick = () => {
-      update({
-         ...row,
-         Discarded: true
-      })
+      // nothing to discard
+      if (Quantity == 0) return
+
+      // discard the whole task
+      else if (Quantity == row.Quantity)
+         update({ ...row, Discarded: true })
+
+      // discard certain Quantity:
+      //    create new task with new quantity:
+      //    row.Quantity - Quantity
+      //    and leave it
+      //    then update what's left
+      else if (Quantity < row.Quantity) {
+         const thisTask = {
+            ...row,
+            Discarded: true,
+            Quantity: Quantity,
+            LastModified: new Date(),
+         }
+         const leftOver = {
+            ...row,
+            id: null,
+            Quantity: row.Quantity - Quantity,
+            LastModified: new Date(),
+         }
+         post("tasks", leftOver)
+         update(thisTask)
+      }
+      else if (Quantity > row.Quantity) {
+         throw "error: new Quantity is somehow > row.Quantity"
+      }
    }
 
    if (!row)
@@ -553,52 +580,6 @@ export function Discard({ row }) {
       disabled={Quantity == 0}
       onClick={onDiscardClick}>
          <h5> Discard Parts </h5>
-      </button>
-   </Card>
-}
-
-
-
-export function DiscardButton({row}) {
-   const ref = React.useRef()
-
-   const onClick = () => {
-      const toastPromise = new Promise(resolve => resolve(
-         update({ ...row, Discarded: true })
-      ))
-
-      toast.promise(toastPromise, {
-         pending: {
-            render() {
-               return <h5>Discarding task...</h5>
-            },
-            icon: false,
-         },
-
-         success: {
-            render() {
-               return <h5>Successfully Discarded Task: {row.Title}</h5>
-            },
-            icon: false,
-         },
-
-         error: {
-            render({data}) {
-               console.error(data)
-               return data
-            },
-            icon: false,
-         }
-      })
-   }
-
-   return <Card style={{
-      padding: 0
-   }}>
-      <button ref={ref} onClick={onClick} style={{background: "unset"}}>
-         <h3>
-            Discard Task
-         </h3>
       </button>
    </Card>
 }
