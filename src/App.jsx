@@ -8,15 +8,13 @@ import { authorizeFirebaseUI } from "./firebase/firebaseUI"
 import "./App.css"
 
 export function App() {
-   const { setShowSidebar } = React.useContext(SidebarContext)
    const { sidebarMarginLeft } = React.useContext(SidebarContext)
+   const { setShowSidebar } = React.useContext(SidebarContext)
 
-   useInitializer(() => {
-      closeSidebarOnPageClick(setShowSidebar)
-      closeSidebarOnEscPress(setShowSidebar)
+   const handleCloseSidebarOnPageClick = () => closeSidebarOnPageClick(setShowSidebar)
 
-      authorizeFirebaseUI()
-   })
+   useInitializer(handleCloseSidebarOnPageClick)
+   useInitializer(authorizeFirebaseUI)
 
    return <div id="App"
    style={{ marginLeft: sidebarMarginLeft }}>
@@ -47,15 +45,9 @@ export function App() {
 // helper functions
 function closeSidebarOnPageClick(setShowSidebar) {
    const handler = () => setShowSidebar(false)
-   const pageElement = document.querySelector(".Page")
+   const pageElement = document.querySelector("#Content")
    pageElement?.addEventListener("click", handler)
    return (() => { pageElement?.removeEventListener("click", handler) })
-}
-
-function closeSidebarOnEscPress(setShowSidebar) {
-   const handler = () => setShowSidebar(false)
-   document?.addEventListener("keyPress", handler)
-   return (() => { document?.removeEventListener("keyPress", handler) })
 }
 
 export default App

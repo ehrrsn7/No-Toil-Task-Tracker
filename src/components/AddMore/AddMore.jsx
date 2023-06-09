@@ -36,40 +36,36 @@ export function AddMore({ showAddTasks, showImportCsv }) {
 
          const tasksToSubmit = []
 
-         if (mobile) toast(<h5>{mobile}</h5>)
+         ref.current.querySelectorAll("tbody > tr").forEach(tableRow => {
+            try {
+               const obj = { Status: 0 }
 
-         else {
-            ref.current.querySelectorAll("tbody > tr").forEach(tableRow => {
-               try {
-                  const obj = { Status: 0 }
+               tableRow.querySelectorAll("td").forEach(cell => {
+                  const inputElement = cell.querySelector("input")
+                  const key = cell.className
 
-                  tableRow.querySelectorAll("td").forEach(cell => {
-                     const inputElement = cell.querySelector("input")
-                     const key = cell.className
+                  switch (inputElement.type) {
+                     case "number":
+                        obj[key] = parseInt(inputElement.value)
+                        break
+                     case "checkbox":
+                        obj[key] = inputElement.checked
+                        break
+                     default:
+                        obj[key] = inputElement.value
+                        break
+                  }
+               })
 
-                     switch (inputElement.type) {
-                        case "number":
-                           obj[key] = parseInt(inputElement.value)
-                           break
-                        case "checkbox":
-                           obj[key] = inputElement.checked
-                           break
-                        default:
-                           obj[key] = inputElement.value
-                           break
-                     }
-                  })
+               if ((obj["Title"] && obj["Title"] == '') || isNaN(obj["Sets"])) 
+                  throw "Missing Title and/or quantity, skipping row"
 
-                  if ((obj["Title"] && obj["Title"] == '') || isNaN(obj["Sets"])) 
-                     throw "Missing Title and/or quantity, skipping row"
-
-                  tasksToSubmit.push({
-                     ...obj, Status: 0, Quantity: obj["Sets"] * 18
-                  })
-               }
-               catch { }
-            })
-         }
+               tasksToSubmit.push({
+                  ...obj, Status: 0, Quantity: obj["Sets"] * 18
+               })
+            }
+            catch { }
+         })
 
          tasksToSubmit.forEach(newTask => {
             post("tasks", newTask)
@@ -116,21 +112,7 @@ export function AddMore({ showAddTasks, showImportCsv }) {
 
    return <ErrorBoundary fallback={<>Error rendering AddMore</>}>
    { showAddTasks && <form onSubmit={onSubmit} ref={ref} id="AddMore">
-      { mobile ?
-         <>
-            { range({end: rows}).map(() => <>
-               <div style={{
-                  marginTop: "1em",
-                  marginBottom: "1em",
-                  paddingBottom: "1em",
-                  borderBottom: "1px solid gray"
-               }}>
-                  <span><h5>Title: </h5><input /></span>
-                  <span><h5>Quantity: </h5><input /></span>
-               </div>
-            </>) }
-         </> :
-         <>
+      <>
          { showImportCsv && <input type="file" name="file" accept=".csv"
          style={{
             margin: "2em auto", padding: "1em",
@@ -160,7 +142,7 @@ export function AddMore({ showAddTasks, showImportCsv }) {
                </tr>) }
             </tbody>
          </table>
-      </>}
+      </>
 
       <span style={{ width: "calc(100% - 2em)", padding: "1em 0", gridTemplateRows: "repeat(3, 1fr)", gap: "1em" }}>
          <span>

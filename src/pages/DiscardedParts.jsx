@@ -13,6 +13,10 @@ export function DiscardedParts() {
    const { setUpdateExpanded } = React.useContext(Context)
    const { tasksLength, setFilterFunction } = React.useContext(Context)
 
+   const onPrintClick = () => {
+      window.print()
+   }
+
    const handleStatusFilter = () => {
       setFilterFunction(() => filterFunctions.unfiltered)
    }
@@ -35,20 +39,18 @@ export function DiscardedParts() {
          Discarded Parts
       </Header>
       <main id="Content">
-         <span style={{maxWidth: 1000}}>
-            <button 
-            onClick={() => window.print()}>
-               <h5>
-                  print
-               </h5>
+      <span style={{ marginBottom: "1em", maxWidth: 1000 }}>
+            <button onClick={onPrintClick} style={{
+               width: "100px", alignSelf: "right",
+            }}>
+               <h4>Print</h4>
             </button>
-
-            <button 
-            disabled={tasksLength <= 0} 
+            <button disabled={tasksLength <= 0} style={{
+               width: "150px",
+               background: tasksLength > 0 && "#ff000055"
+            }}
             onClick={handleDeleteTasks}>
-               <h5>
-                  delete tasks
-               </h5>
+               <h4>Delete Tasks</h4>
             </button>
          </span>
          <TaskTable discarded />

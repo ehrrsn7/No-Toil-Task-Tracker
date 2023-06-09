@@ -12,9 +12,80 @@
    border-width: 1px;
 }
 
+/* Go To Status Button */
+tr.AccordionRow .MasonryLayout .MasonryCard > div > a.GoToStatusButton > button {
+   background: transparent;
+   width: 100%;
+   transition: all .2s ease-in-out;
+}
+
+tr.AccordionRow .MasonryLayout .MasonryCard:has(div > a.GoToStatusButton) {
+   transition: border-color .2s ease-in-out;
+}
+
+tr.AccordionRow .MasonryLayout .MasonryCard:has(div > a.GoToStatusButton > button:not(:disabled)):hover {
+   border-color: green !important;
+}
+
+a.GoToStatusButton:hover > button:not(:disabled) {
+   color: green;
+}
+
+/* Update/Discard Cards */
+tr.AccordionRow .MasonryLayout .MasonryCard:has(#Discard),
+tr.AccordionRow .MasonryLayout .MasonryCard:has(#Update) {
+   place-items: center;
+}
+
+tr.AccordionRow .MasonryLayout .MasonryCard #Discard,
+tr.AccordionRow .MasonryLayout .MasonryCard #Update {
+   max-width: 350px;
+   margin: auto;
+   place-content: center;
+   place-items: center;
+   gap: 1em;
+}
+
+tr.AccordionRow .MasonryLayout .MasonryCard #Discard .UpdateQuantity,
+tr.AccordionRow .MasonryLayout .MasonryCard #Update .UpdateQuantity {
+   gap: 1em;
+}
+
+tr.AccordionRow .MasonryLayout .MasonryCard #Discard input,
+tr.AccordionRow .MasonryLayout .MasonryCard #Update input {
+   max-width: 30px;
+   border: 1px solid gray;
+   border-radius: .3em;
+}
+
+tr.AccordionRow .MasonryLayout .MasonryCard #Update > h2,
+tr.AccordionRow .MasonryLayout .MasonryCard #Discard > h2 {
+   margin-bottom: .3em;
+}
+
+button.DecrementButton,
+button.IncrementButton {
+   --scale: .5;
+   height:calc(50px * var(--scale));
+   width:calc(50px * var(--scale));
+   padding: 0;
+   margin: 0;
+   cursor:pointer;
+}
+
+button.DecrementButton > *,
+button.IncrementButton > * {
+   margin: auto;
+}
+
+.UpdateQuantityAmount {
+   gap: 1em;
+}
+
 /* MoreInfo card */
 div#MoreInfo {
    place-items: center;
+   --max-width: 450px;
 }
 
 /* MoreInfo table */
@@ -22,18 +93,58 @@ div#MoreInfo table {
    border-spacing: 0;
    table-layout: fixed;
    width: 100%;
-   max-width: 450px;
+   max-width: var(--max-width);
+   margin-bottom: 1em;
 }
 
 /* MoreInfo title */
-#MoreInfo > h2 {
-   font-size: 40px;
-   transform: scaleX(110%) translate(15px, 0);
-   text-align: left;
-   padding-bottom: .5em;
+#MoreInfo > span {
+   place-items: space-between;
+   place-content: space-between;
    width: 100%;
-   max-width: 450px;
-   letter-spacing: -.08em;
+   max-width: var(--max-width);
+}
+
+/* Edit MoreInfo fields buttons */
+#MoreInfo > span > span:has(button) {
+   margin: auto;
+   margin-right: 0;
+   gap: 1em;
+}
+
+div#MoreInfo > span > button,
+#MoreInfo > span > span > button {
+   padding: .1em 1em;
+   height: fit-content;
+   min-width: 80px;
+}
+
+/* MoreInfo input fields */
+#MoreInfo > table > tbody > tr > td > input {
+   width: 100%;
+   border: none;
+   padding: 5px;
+   /* background: pink; */
+}
+
+#MoreInfo > table > tbody > tr > td > input[type="text"]:disabled {
+   /* background: red; */
+}
+
+#MoreInfo > table > tbody > tr > td > input[type="text"] {
+   /* background: cyan; */
+}
+
+#MoreInfo > table > tbody > tr > td > input[type="number"] {
+   /* background: orange; */
+}
+
+#MoreInfo > table > tbody > tr > td > input[type="date"] {
+   /* background: teal; */
+}
+
+#MoreInfo > table > tbody > tr > td > input[type="checkbox"] {
+   /* background: green; */
 }
 
 /* border between MoreInfo table rows */
@@ -58,12 +169,29 @@ div#MoreInfo table > tbody > tr > td:nth-child(1) {
 
 div#MoreInfo table > tbody > tr > td:nth-child(2) {
    width: 60%;
+}
+
+div#MoreInfo table > tbody > tr > td:nth-child(2),
+div#MoreInfo table > tbody > tr > td:nth-child(2) > * {
    color: rgb(58, 58, 58);
    text-transform: none;
 }
 
 div#MoreInfo table > tbody > tr:nth-child(1) > td:nth-child(2) {
    word-break: break-all;
+}
+
+/* colored buttons */
+#MoreInfo button#DeleteTask:not(:disabled),
+button#DiscardPartsButton:not(:disabled) {
+   background: #FF0000A0;
+   color: white;
+}
+
+#MoreInfo button#TaskDone:not(:disabled),
+div#Update > button#UpdateButton:not(:disabled) {
+   background: #00A000A0;
+   color: white;
 }
 
 @media (prefers-color-scheme: light) {
@@ -84,4 +212,10 @@ div#MoreInfo table > tbody > tr:nth-child(1) > td:nth-child(2) {
    div#MoreInfo table > tbody > tr > td:nth-child(2) {
       color: rgb(200, 200, 200);
    }
+
+   div#MoreInfo table > tbody > tr > td:nth-child(2),
+   div#MoreInfo table > tbody > tr > td:nth-child(2) > * {
+      color: rgb(187, 187, 187);
+   }
+
 }

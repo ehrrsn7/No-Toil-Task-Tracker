@@ -1,15 +1,18 @@
 import React from "react"
-import { Link } from "react-router-dom"
+import { Link, useLocation } from "react-router-dom"
 import { motion } from "framer-motion"
 import { useMedia } from "react-use"
 import { toast } from "react-toastify"
 import {
-   MasonryLayout, MasonryCard, ErrorBoundary
+   MasonryLayout, MasonryCard, ErrorBoundary, useInitializer
 } from "ehrrsn7-components"
-import { setCSSProperty, statusMapNumberToName } from "@utils"
+import {
+   setCSSProperty, statusMapNumberToName, statusMapNameToNumber
+} from "@utils"
 import { Context } from "@contexts"
-import { update } from "../../firebase"
+import { deleteTask, post, update } from "../../firebase"
 import "./AccordionRow.css"
+import { isObject } from "url/util"
 
 export function AccordionRow({ row }) {
    const desktop = useMedia("(min-width: 850px)")
@@ -40,9 +43,7 @@ export function AccordionRow({ row }) {
             <MoreInfo row={row} />
             <GoToStatusButton row={row} />
             <Update row={row} />
-            <UpdateButton row={row} />
             <Discard row={row} />
-            <DiscardButton row={row} />
          </MasonryLayout>
       </td>
    </motion.tr>
@@ -64,15 +65,23 @@ export function Card({style, children, id}) {
 }
 
 export function GoToStatusButton({ row }) {
-   const ref = React.useRef()
-
    const { setUpdateExpanded } = React.useContext(Context)
+   const location = useLocation()
+
+   const disabled = row.Status == statusMapNameToNumber(location.pathname.replace('/', ''))
+
+   const to = !disabled && statusMapNumberToName(row?.Status)
+
+   const onClick = () => {
+      if (disabled) return
+      setUpdateExpanded(-1)
+   }
 
    return <Card style={{
       padding: 0
    }}>
-      <Link to={statusMapNumberToName(row?.Status)} onClick={() => setUpdateExpanded(-1)}>
-         <button ref={ref} style={{ background: "unset", width: "100%" }} >
+      <Link className="GoToStatusButton" to={to} onClick={onClick}>
+         <button disabled={disabled}>
             <h3>
                Go to '{statusMapNumberToName(row?.Status)}'
             </h3>
@@ -82,63 +91,473 @@ export function GoToStatusButton({ row }) {
 }
 
 export function MoreInfo({ row }) {
+   const [ editEnabled, setEditEnabled ] = React.useState(false)
+   const [ id, setid ] = React.useState(row.id)
+   const [ Title, setTitle ] = React.useState(row.Title)
+   const [ Quantity, setQuantity ] = React.useState(row.Quantity)
+   const [ Status, setStatus ] = React.useState(row.Status)
+   const [ Description, setDescription ] = React.useState(row.Description)
+   const [ LastModified, setLastModified ] = React.useState(row.LastModified)
+   const [ Oil, setOil ] = React.useState(row.Oil)
+   const [ HighPriority, setHighPriority ] = React.useState(row.HighPriority)
+   const [ Discarded, setDiscarded ] = React.useState(row.Discarded)
+   const tablet = useMedia("(max-width: 550px)")
+
+   const handleDelete = () => {
+      const toastID = toast.loading({
+         render: `Deleting task '${row.Title}'`,
+         autoClose: 3000
+      })
+      console.log("before promise", {toastID})
+      deleteTask(row.id)
+         .then(() => {
+            console.log("after promise", {toastID})
+            toast.update(toastID, {
+               render: `Successfully deleted task '${row.Title}'`,
+               type: "error",
+               isLoading: false,
+               icon: false
+            })
+         })
+         .catch(() => {
+            console.log("error in promise", {toastID})
+            toast.update(toastID, {
+               render: `Error pushing changes to tasks['${row.Title}']`,
+               type: "error",
+               isLoading: false
+            })
+         })
+   }
+
+   const handleDone = () => {
+      const toastID = toast.loading({
+         render: `Pushing changes to tasks['${row.Title}']`,
+         autoClose: 3000
+      })
+      
+      // update task here
+      update({id, Title, Quantity, Status,
+         Description, LastModified,
+         Oil, HighPriority, Discarded
+      }).then(() => {
+            console.log("after promise", {toastID})
+            toast.update(toastID, {
+               render: `Successfully pushed changes to tasks['${row.Title}']`,
+               type: "success",
+               isLoading: false
+            })
+            setEditEnabled(false)
+         })
+         .catch(() => {
+            console.log("error in promise", {toastID})
+            toast.update(toastID, {
+               render: `Error pushing changes to tasks['${row.Title}']`,
+               type: "error",
+               isLoading: false
+            })
+         })
+   }
+   
    if (!row)
       throw "In MoreInfo(row): row is undefined."
 
    return <Card>
-      <div id="MoreInfo">
-         <h2>
-            More Info
-         </h2>
+      <div id="MoreInfo" style={{marginBottom: "2em", paddingBottom: !editEnabled && "1.2em"}}>
+         <span style={{
+            margin: "0 0 1em 0",
+            flexDirection: tablet && "column",
+            placeContent: tablet && "center",
+            placeItems: tablet && "center",
+            gap: "1em",
+         }}>
+            <h1 className="squishy-letters"> More Info </h1>
 
-         <h4>
+            <span style={{margin: tablet ? "auto" : 0, placeContent: "center"}}>
+               <button onClick={() => setEditEnabled(!editEnabled)}>
+                  <h4> {editEnabled ? "Cancel" : "Edit"} </h4>
+               </button>
+            </span>
+         </span>
+
          <table>
             <tbody>
                <tr>
-                  <td>id</td>
-                  <td>{row.id}</td>
+                  <td><h4>id</h4></td>
+                  { editEnabled ?
+                     <MoreInfoInput
+                     property="id" value={id} setValue={setid}
+                     type="text" disabled
+                     /> :
+                     <MoreInfoOutput
+                     property="id"
+                     type="text" value={id}
+                     />
+                  }
                </tr>
                <tr>
-                  <td>title</td>
-                  <td>{row.Title}</td>
+                  <td><h4>Title</h4></td>
+                  { editEnabled ?
+                     <MoreInfoInput
+                     property="Title" value={Title} setValue={setTitle}
+                     type="text"
+                     /> :
+                     <MoreInfoOutput
+                     property="Title"
+                     type="text" value={Title}
+                     />
+                  }
                </tr>
                <tr>
-                  <td>quantity</td>
-                  <td>{row.Quantity} each</td>
+                  <td><h4>Quantity</h4></td>
+                  { editEnabled ?
+                     <MoreInfoInput
+                     property="Quantity" value={Quantity} setValue={setQuantity}
+                     type="number"
+                     /> :
+                     <MoreInfoOutput
+                     property="Quantity"
+                     type="number" value={Quantity}
+                     />
+                  }
                </tr>
                <tr>
-                  <td>status</td>
-                  <td>{row.Status} — {statusMapNumberToName(row.Status)}</td>
+                  <td><h4>Status</h4></td>
+                  { editEnabled ?
+                     <MoreInfoInput
+                     property="Status" value={Status} setValue={setStatus}
+                     type="number" Oil={Oil}
+                     /> :
+                     <MoreInfoOutput
+                     property="Status"
+                     type="number" value={Status}
+                     />
+                  }
                </tr>
                <tr>
-                  <td>description</td>
-                  <td>{row.Description}</td>
+                  <td><h4>Description</h4></td>
+                  { editEnabled ?
+                     <MoreInfoInput
+                     property="Description" value={Description} setValue={setDescription}
+                     type="text"
+                     /> :
+                     <MoreInfoOutput
+                     property="Description"
+                     type="text" value={Description}
+                     />
+                  }
                </tr>
                <tr>
-                  <td>last modified</td>
-                  <td>
-                     {row.LastModified?.toDateString("en-us")}<br />
-                     {row.LastModified?.toLocaleTimeString("en-us")}
-                  </td>
+                  <td><h4>Last Modified</h4></td>
+                  { editEnabled ?
+                     <MoreInfoInput
+                     property="LastModified" value={LastModified} setValue={setLastModified}
+                     type="datetime-local"
+                     /> :
+                     <MoreInfoOutput
+                     property="LastModified"
+                     type="datetime-local" value={LastModified}
+                     />
+                  }
                </tr>
                <tr>
-                  <td>oil</td>
-                  <td>{row.Oil ? "✅" : "✖️"}</td>
+                  <td><h4>Oil</h4></td>
+                  { editEnabled ?
+                     <MoreInfoInput
+                     property="Oil" value={Oil} setValue={setOil}
+                     type="checkbox"
+                     /> :
+                     <MoreInfoOutput
+                     property="Oil"
+                     type="checkbox" value={Oil}
+                     />
+                  }
                </tr>
                <tr>
-                  <td>High Priority</td>
-                  <td>{row.HighPriority ? "✅" : "✖️"}</td>
+                  <td><h4>High Priority</h4></td>
+                  { editEnabled ?
+                     <MoreInfoInput
+                     property="HighPriority" value={HighPriority} setValue={setHighPriority}
+                     type="checkbox"
+                     /> :
+                     <MoreInfoOutput
+                     property="HighPriority"
+                     type="checkbox" value={HighPriority}
+                     />
+                  }
                </tr>
                <tr>
-                  <td>Discarded</td>
-                  <td>{row.Discarded ? "✅" : "✖️"}</td>
+                  <td><h4>Discarded</h4></td>
+                  { editEnabled ?
+                     <MoreInfoInput
+                     property="Discarded" value={Discarded} setValue={setDiscarded}
+                     type="checkbox"
+                     /> :
+                     <MoreInfoOutput
+                     property="Discarded"
+                     type="checkbox" value={Discarded}
+                     />
+                  }
                </tr>
             </tbody>
          </table>
-         </h4>
+         { editEnabled && <span style={{placeContent: "space-around"}}>
+            <button id="DeleteTask" onClick={handleDelete}>
+               <h4>delete</h4>
+            </button>
+            <button id="TaskDone" onClick={handleDone}>
+               <h4>Done</h4>
+            </button>
+         </span>}
       </div>
    </Card>
 }
+
+function MoreInfoOutput({ property, type, value, style, className, id }) {
+   const handleOutput = () => {
+      switch (type) {
+         case "number":
+            switch (property) {
+               case "Status":
+                  return <h4>{value} : {statusMapNumberToName(value)}</h4>
+               case "Quantity":
+                  return <h4>{value} each</h4>
+               default: return <h4>{value}</h4>
+            }
+
+         case "datetime-local":
+            if (!value || !(value instanceof Date))
+            return <em><strong>Error: value is not a Date.</strong></em>
+            return <h4>
+               {value.toDateString("en-us")}<br />
+               {value.toLocaleTimeString("en-us")}
+            </h4>
+
+         case "checkbox":
+            return <h4>{value ? "✅" : "✖️"}</h4>
+
+         default:
+            if (isObject(value))
+               return <em><strong>Error: value is an object.</strong></em>
+            return <h4>{value}</h4>
+      }
+   }
+
+   return <td id={id} className={className} style={style}>
+      {handleOutput() }
+   </td>
+}
+
+function MoreInfoInput({
+   property, type, disabled,
+   value, setValue, Oil,
+   style, className, id
+}) {
+   const handleInput = () => {
+      if (type == "number") {
+         if (property == "Status") {
+            return <select onChange={event => {
+               const newValue = statusMapNameToNumber(
+                  (event.target.value == "Complete") ?
+                     "CompletedParts" :
+                     event.target.value
+               )
+               setValue(newValue)
+            }}>
+               <option>Stamp</option>
+               <option>Spray</option>
+               <option>Check</option>
+               <option disabled={!Oil}>Oil</option>
+               <option>Bag</option>
+               <option>Complete</option>
+            </select>
+         }
+      }
+
+      if (type == "checkbox") {
+         return <label className="CheckboxContainer">
+            <input type={type} checked={value} disabled={disabled} onChange={event => {
+               const newValue = event.target.checked
+               setValue(newValue)
+            }} />
+            <span className="Checkmark" />
+         </label>
+      }
+
+      if (type == "datetime-local") {
+         return <input
+         type={type}
+         value={value?.toLocaleString("sv-SE", {
+            year: "numeric",
+            month: "2-digit",
+            day: "2-digit",
+            hour: "2-digit",
+            minute: "2-digit",
+            second: "2-digit"
+        }).replace(" ", "T")}
+         disabled={disabled}
+         pattern="\d{4}-\d{2}-\d{2}"
+         onChange={event => {
+            const newValue = new Date(event.target.value)
+            setValue(newValue)
+         }}
+         />
+      }
+
+      const onChange = event => setValue(event.target.value)
+
+      return <input type={type} value={value} disabled={disabled} onChange={onChange} />
+   }
+
+   return <td id={id} className={className} style={style}>
+      {handleInput()}
+   </td>
+}
+
+export function Update({ row }) {
+   const [ Quantity, setQuantity ] = React.useState(row.Quantity)
+
+   const onInputChange = event => {
+      const newQuantity = event.target.value
+      if (newQuantity > row.Quantity || newQuantity < 0) return
+      setQuantity(newQuantity)
+   }
+
+   const onIncrementClick = () => {
+      const newQuantity = parseInt(Quantity) + 1
+      setQuantity(newQuantity)
+   }
+
+   const onDecrementClick = () => {
+      const newQuantity = parseInt(Quantity) - 1
+      setQuantity(newQuantity)
+   }
+
+   const onUpdateClick = () => {
+      if (row.Status == 5) {
+         console.log("Status is already complete. Do not update.")
+      }
+      else if (Quantity == 0) {
+         console.log("nothing to update")
+      }
+      else if (Quantity == row.Quantity) {
+         console.log("update the whole task")
+         update({...row, Status: row.Status + 1})
+      }
+      else if (Quantity < row.Quantity) {
+         console.log(
+            "update Quantity, create new task with new quantity == row.Quantity - Quantity and leave it, then update the rest"
+         )
+         const thisTask = {
+            ...row,
+            Status: row.Status + 1,
+            Quantity: Quantity,
+            LastModified: new Date(),
+         }
+         const leftOver = {
+            ...row,
+            id: null,
+            Quantity: row.Quantity - Quantity,
+            LastModified: new Date(),
+         }
+         console.log("posting", leftOver)
+         post("tasks", leftOver)
+         console.log("updating", thisTask)
+         update(thisTask)
+      }
+      else if (Quantity > row.Quantity) {
+         throw "error: new Quantity is somehow > row.Quantity"
+      }
+   }
+
+   if (!row)
+      throw "In Update(row): row is undefined."
+
+   return <Card id="Update">
+      <h2> Update Parts </h2>
+
+      <span className="UpdateQuantity">
+         <button className="DecrementButton"
+         disabled={Quantity <= 0}
+         onClick={onDecrementClick}>
+            <h5> - </h5>
+         </button>
+
+         <span className="UpdateQuantityAmount">
+            <input value={ Quantity } onChange={ onInputChange } />
+            <h3> each </h3>
+         </span>
+
+         <button className="IncrementButton"
+         disabled={Quantity >= row.Quantity}
+         onClick={onIncrementClick}>
+            <h5> + </h5>
+         </button>
+      </span >
+      <button id="UpdateButton" disabled={Quantity == 0 || row.Status == 5} onClick={onUpdateClick}>
+         <h5> Update Parts </h5>
+      </button>
+   </Card>
+}
+
+export function Discard({ row }) {
+   const [ Quantity, setQuantity ] = React.useState(row.Quantity)
+
+   const onInputChange = event => {
+      const newQuantity = event.target.value
+      if (newQuantity > row.Quantity || newQuantity < 0) return
+      setQuantity(newQuantity)
+   }
+
+   const onIncrementClick = () => {
+      const newQuantity = Quantity + 1
+      setQuantity(newQuantity)
+   }
+
+   const onDecrementClick = () => {
+      const newQuantity = Quantity - 1
+      setQuantity(newQuantity)
+   }
+
+   const onDiscardClick = () => {
+      update({
+         ...row,
+         Discarded: true
+      })
+   }
+
+   if (!row)
+      throw "In Update(row): row is undefined."
+
+   return <Card id="Discard">
+      <h2> Discard Parts </h2>
+
+      <span className="UpdateQuantity">
+         <button className="DecrementButton"
+         disabled={Quantity <= 0}
+         onClick={onDecrementClick}>
+            <h5>-</h5>
+         </button>
+
+         <span className="UpdateQuantityAmount">
+            <input value={ Quantity } onChange={onInputChange} />
+            <h3> each </h3>
+         </span>
+
+         <button className="IncrementButton"
+         disabled={Quantity >= row.Quantity}
+         onClick={onIncrementClick}>
+            <h5> + </h5>
+         </button>
+      </span >
+      <button id="DiscardPartsButton"
+      disabled={Quantity == 0}
+      onClick={onDiscardClick}>
+         <h5> Discard Parts </h5>
+      </button>
+   </Card>
+}
+
+
 
 export function DiscardButton({row}) {
    const ref = React.useRef()
@@ -180,186 +599,6 @@ export function DiscardButton({row}) {
          <h3>
             Discard Task
          </h3>
-      </button>
-   </Card>
-}
-
-export function Discard({ row }) {
-   const [ quantity, setQuantity ] = React.useState(0)
-
-   if (!row)
-      throw "In Update(row): row is undefined."
-
-   return <Card>
-      <h3 style={{padding: "0.5em"}}>
-         Discard Parts
-      </h3>
-      <span style={{
-         placeContent: "space-between"
-      }}>
-         <button style={{
-            margin: ".5em",
-            padding: ".5em",
-            width: "2.5em",
-            height: "2.5em",
-            transition: ".3s ease-in-out",
-         }} onClick={() => setQuantity(quantity - 1)}>
-            -
-         </button>
-
-         <div style={{
-            padding: "1em",
-            placeContent: "center",
-            placeItems: "space-between",
-            textAlign: "center",
-         }}>
-            <h2 style={{
-               textAlign: "center",
-               padding: 0,
-               margin: 0,
-            }}>
-               {quantity}
-            </h2>
-            <h4 style={{
-               padding: 0,
-               margin: 0,
-            }}>
-               Sets
-            </h4>
-         </div>
-
-         <button style={{
-            margin: ".5em",
-            padding: ".5em",
-            width: "2.5em",
-            height: "2.5em",
-            transition: ".3s ease-in-out",
-            borderRadius: "18px",
-         }}
-         onClick={() => setQuantity(
-            quantity <= row.Quantity ? quantity + 1 : quantity
-         )}>
-            +
-         </button>
-      </span>
-      <button>
-         <h5>
-            Discard Parts
-         </h5>
-      </button>
-   </Card>
-}
-
-export function UpdateButton({row}) {
-   const ref = React.useRef()
-
-   const onClick = () => {
-      const toastPromise = new Promise(resolve => resolve(
-         // ...
-      ))
-
-      toast.promise(toastPromise, {
-         pending: {
-            render() {
-               return <h5>Updating task...</h5>
-            },
-            icon: false,
-         },
-
-         success: {
-            render() {
-               return <h5>Successfully Updated Task: {row.Title}</h5>
-            },
-            icon: false,
-         },
-
-         error: {
-            render({data}) {
-               console.error(data)
-               return data
-            },
-            icon: false,
-         }
-      })
-   }
-
-   return <Card style={{
-      padding: 0
-   }}>
-      <button ref={ref} onClick={onClick} style={{background: "unset"}}>
-         <h3>
-            Update Task
-         </h3>
-      </button>
-   </Card>
-}
-
-
-export function Update({ row }) {
-   const [ quantity, setQuantity ] = React.useState(0)
-
-   if (!row)
-      throw "In Update(row): row is undefined."
-
-   return <Card>
-      <h3 style={{padding: "0.5em"}}>
-         Update '{row.Title}'
-      </h3>
-      <span style={{
-         placeContent: "space-between"
-      }}>
-         <button style={{
-            margin: ".5em",
-            padding: ".5em",
-            width: "2.5em",
-            height: "2.5em",
-            transition: ".3s ease-in-out",
-         }} onClick={() => setQuantity(quantity - 1)}>
-            -
-         </button>
-
-         <div style={{
-            padding: "1em",
-            placeContent: "center",
-            placeItems: "space-between",
-            textAlign: "center",
-         }}>
-            <h2 style={{
-               textAlign: "center",
-               padding: 0,
-               margin: 0,
-            }}>
-               {quantity}
-            </h2>
-            <h4 style={{
-               padding: 0,
-               margin: 0,
-            }}>
-               Sets
-            </h4>
-         </div>
-
-         <button style={{
-            margin: ".5em",
-            padding: ".5em",
-            width: "2.5em",
-            height: "2.5em",
-            transition: ".3s all ease-in-out",
-         }} onClick={() => setQuantity(
-            quantity <= row.Quantity ? quantity + 1 : quantity
-         )}>
-            +
-         </button>
-      </span>
-      <button style={{
-         transition: ".3s all ease-in-out",
-         border: "1px solid rgb(0,0,0,0.05)",
-         padding: "0.5em",
-         borderRadius: "15px",
-      }}>
-         <h5>
-            Update Parts
-         </h5>
       </button>
    </Card>
 }

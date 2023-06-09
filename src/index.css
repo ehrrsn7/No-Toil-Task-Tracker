@@ -99,12 +99,20 @@ a:hover {
    color: var(--no-toil-orange-dark);
 }
 
+:focus {
+   outline: none;
+}
+
 input {
    padding-left: 4px;
 }
 
 input::placeholder {
    font-style: italic;
+}
+
+input[type="checkbox"] {
+   font-size: 8px;
 }
 
 body {
@@ -176,7 +184,7 @@ button:disabled {
 
 .squishy-letters {
    transform: scaleX(105%);
-   letter-spacing: -.06em;
+   letter-spacing: -.08em;
 }
 
 /* mobile */

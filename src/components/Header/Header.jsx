@@ -4,7 +4,6 @@ import {
    SidebarContext, ToggleSidebarButton,
    Header as HeaderComponent, useInitializer
 } from "ehrrsn7-components"
-import { OneTapLogin } from "../../firebase/firebaseUI"
 import { Context } from "@contexts"
 import "./Header.css"
 
@@ -32,7 +31,7 @@ const components = {
 
             <Status />
 
-            login
+            {/* login */}
          </span>
          <span style={{ width: "100%", placeContent: "center" }}>
             <h2 id="Title" className="squishy-letters"
@@ -72,8 +71,7 @@ const components = {
          }}>
             { <Status style={{ padding: "1em" }} /> }
             <div style={{gap: 10, padding: 10}}>
-               <OneTapLogin />
-               login
+               {/* login */}
             </div>
          </span>
       </span>

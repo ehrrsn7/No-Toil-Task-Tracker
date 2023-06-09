@@ -75,7 +75,8 @@
    #Sidebar h2,
    #Sidebar #FirestoreSidebarLink,
    #Sidebar div a:hover button,
-   #Sidebar #CloseSidebarButton:hover {
+   #Sidebar #CloseSidebarButton:hover,
+   #Sidebar .SidebarLink-Selected > a > button {
       color: white;
    }
 

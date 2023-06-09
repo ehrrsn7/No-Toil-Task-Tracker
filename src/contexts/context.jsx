@@ -26,10 +26,13 @@ export function ContextProvider({ children }) {
             const discardedFilter = filterDiscarded ?
                filterFunctions.discardedPartsStatus :
                filterFunctions.notDiscardedPartsStatus
+            const searchStateFilter = row =>
+               row.Title.toLowerCase().includes(searchState.toLowerCase()) ||
+               row.id.toLowerCase().includes(searchState.toLowerCase())
             return objToArray(tasks)
                .filter(filterFunction)
                .filter(discardedFilter)
-               .filter(row => row.Title.includes(searchState))
+               .filter(searchStateFilter)
          }
 
          const newTasksLength = getTasks().length

@@ -26,14 +26,15 @@ export function TaskTable({
          filterFunctions.discardedPartsStatus :
          filterFunctions.notDiscardedPartsStatus
       const searchStateFilter = row =>
-         row.Title.includes(searchState) ||
-         row.id.includes(searchState)
+         row.Title.toLowerCase().includes(searchState.toLowerCase()) ||
+         row.id.toLowerCase().includes(searchState.toLowerCase())
       const get = () => objToArray(tasks)
          .filter(filterFunction)
          .filter(searchStateFilter)
          .filter(discardedFilter)
       if (paginated)
-         return get().slice(paginationOffset, paginationOffset + paginationRange)
+         return get()
+            .slice(paginationOffset, paginationOffset + paginationRange)
       return get().filter(discardedFilter)
    }
 

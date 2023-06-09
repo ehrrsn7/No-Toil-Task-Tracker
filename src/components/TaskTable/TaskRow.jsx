@@ -21,6 +21,7 @@ export const TaskRow = {
       setUpdateExpanded,
       showUpdate,
    }) {
+      const { updateExpanded } = React.useContext(Context)
       const tiny = useMedia(tinyQuery)
       const mobile = useMedia(mobileQuery)
       const tablet = useMedia(tabletQuery)
@@ -62,10 +63,16 @@ export const TaskRow = {
             </TableHead>
          }
 
-         { !mobile && showUpdate &&
-            <td id="Update" onClick={() => setUpdateExpanded('')}>
+         { !mobile && (showUpdate && ((updateExpanded != '') ?
+            <td id="Update">
+               <button style={{padding: "0 15px", height: 25, marginTop: "2px"}}
+               onClick={() => setUpdateExpanded('')}>
+                  <h4>—</h4>
+               </button>
+            </td> :
+            <td id="Update">
                <h4>Update</h4>
-            </td>
+            </td>))
          }
       </tr>
    },
@@ -229,7 +236,7 @@ export function Update({ row, showUpdate }) {
          if (newStatus < 0 || newStatus >= 6)
             throw `Invalid new Status: '${newStatus}'`
 
-         updateFirebase("tasks", { ...row, Status: newStatus })
+         updateFirebase({ ...row, Status: newStatus })
             // promises should use a .then and .catch
             // bug fix: sortedBy would reset and jumble up the order
             .then(() => setSortedBy(sortedBy))
