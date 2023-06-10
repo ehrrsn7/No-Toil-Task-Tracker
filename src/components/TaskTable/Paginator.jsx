@@ -37,8 +37,8 @@ export function Paginator(props) {
    ])
 
    // component
-   return paginated && (totalPages > 1 && <div className="Paginator">
-      <ResponsivePagination
+   return totalPages > 1 && <div className="Paginator">
+      {  paginated && <ResponsivePagination
          props={props}
          id="TaskTablePaginate"
          current={currentPage}
@@ -46,22 +46,29 @@ export function Paginator(props) {
          onPageChange={setCurrentPage}
          previousLabel={"Previous"}
          nextLabel={"Next"}
-      />
+      /> }
 
       { tasksLength > 0 && <>
-         <h5 style={{
+         { paginated && <h5 style={{
             color: "GrayText", margin: "1em 0", letterSpacing: ".1em",
          }}>
             showing {paginationOffset + 1} to {showingEnd} of {tasksLength}
-         </h5>
-         <button
-         style={{padding: "0 1em", margin: 0}}
-         onClick={() => setPaginated(false)}>
-            See all
-         </button>
+         </h5> }
+         { paginated ?
+            <button
+            style={{padding: "0 1em", margin: 0}}
+            onClick={() => setPaginated(false)}>
+               See all
+            </button> :
+            <button
+            style={{padding: "0 1em", margin: 0}}
+            onClick={() => setPaginated(true)}>
+               See less
+            </button>
+         }
          </>
       }
-   </div>)
+   </div>
 }
 
 export function SearchAndNavigateBar({ navigate, search }) {

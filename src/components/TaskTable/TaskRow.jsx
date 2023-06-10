@@ -1,5 +1,5 @@
 import React from "react"
-import { Link } from "react-router-dom"
+import { Link, useLocation } from "react-router-dom"
 import { motion } from "framer-motion"
 import { toast } from "react-toastify"
 import { separateCamelCase, ErrorBoundary, useMedia } from "ehrrsn7-components"
@@ -58,7 +58,7 @@ export const TaskRow = {
          }
 
          { !tablet && showHighPriority &&
-            <TableHead id="HighPriority" style={{ minWidth: 45 }}>
+            <TableHead id="HighPriority" style={{ minWidth: 25 }}>
                !
             </TableHead>
          }
@@ -87,6 +87,8 @@ export const TaskRow = {
       showStatus,
       showHighPriority
    }) {
+      const location = useLocation()
+
       return <motion.tr initial="hidden" animate="show" 
       id={row.id == updateExpanded ? "updateExpanded" : ''}
       className={`TaskTableRow ${row.id}`}
@@ -122,7 +124,12 @@ export const TaskRow = {
          <HighPriority
          showHighPriority={showHighPriority}>
             {row.HighPriority ?
-               <Link to="HighPriority"><button>!</button></Link> :
+               <Link to="HighPriority"
+               disabled={location.pathname == "/HighPriority"}>
+                  <button disabled={location.pathname == "/HighPriority"}>
+                     !
+                  </button>
+               </Link> :
                ''
             }
          </HighPriority>

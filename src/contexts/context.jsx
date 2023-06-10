@@ -46,11 +46,6 @@ export function ContextProvider({ children }) {
 
    const handleFetchTasks = () => {
       fetchTasks({tasks, setTasks, setConnected})
-         .then(() => {
-            setTimeout(() => {
-               setSortedBy("Title-Ascending")
-            }, 2000)
-         })
    }
 
    // initializer caller

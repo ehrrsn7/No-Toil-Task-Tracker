@@ -2,10 +2,9 @@ import React from "react"
 import { LayoutGroup, motion } from "framer-motion"
 import { useInitializer, ErrorBoundary } from "ehrrsn7-components"
 import { Context } from "@contexts"
-import { objToArray, filterFunctions } from "@utils"
+import { objToArray, getSortFunction, filterFunctions } from "@utils"
 import { SearchAndNavigateBar, AccordionRow, TaskRow } from "."
 import "./TaskTable.css"
-import { getSortFunction } from "../../utils"
 
 export function TaskTable({
    setsOrQuantity, showStatus, showLastModified, showHighPriority, showUpdate, isPaginated, paginationRangeOverride, search, navigate, discarded
@@ -53,10 +52,9 @@ export function TaskTable({
    }
 
    // on change
-   useInitializer(() => {
-      console.log(isPaginated)
-      setPaginated(isPaginated)
-   })
+   useInitializer(() => setPaginated(isPaginated))
+   useInitializer(handlePaginationRangeOverride)
+   useInitializer(handleDiscarded)
    useInitializer(handlePaginationRangeOverride)
    useInitializer(handleDiscarded)
 

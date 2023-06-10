@@ -27,8 +27,6 @@ export function Dashboard() {
    useInitializer(handleTasksSorting)
    useInitializer(handleStatusFilter)
 
-   useInitializer(() => {console.log("does this once once? or every page load")})
-
    return <ErrorBoundary fallback={<>Error rendering Dashboard component.</>}>
    <span id="Dashboard" className="Page">
       <Header>
