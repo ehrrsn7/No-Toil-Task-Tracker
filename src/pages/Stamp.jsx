@@ -24,7 +24,7 @@ export function Stamp() {
             showHighPriority
             showLastModified
             showUpdate 
-            paginated
+            isPaginated
             search
             navigate
          />

@@ -8,6 +8,7 @@ import "./Paginator.css"
 export function Paginator(props) {
    // hooks
    const {
+      paginated, setPaginated,
       paginationRange, setPaginationRange,
       paginationOffset, setPaginationOffset,
       currentPage, setCurrentPage, tasksLength,
@@ -36,7 +37,7 @@ export function Paginator(props) {
    ])
 
    // component
-   return totalPages > 1 && <div className="Paginator">
+   return paginated && (totalPages > 1 && <div className="Paginator">
       <ResponsivePagination
          props={props}
          id="TaskTablePaginate"
@@ -47,19 +48,26 @@ export function Paginator(props) {
          nextLabel={"Next"}
       />
 
-      { tasksLength > 0 && 
+      { tasksLength > 0 && <>
          <h5 style={{
             color: "GrayText", margin: "1em 0", letterSpacing: ".1em",
          }}>
             showing {paginationOffset + 1} to {showingEnd} of {tasksLength}
          </h5>
+         <button
+         style={{padding: "0 1em", margin: 0}}
+         onClick={() => setPaginated(false)}>
+            See all
+         </button>
+         </>
       }
-   </div>
+   </div>)
 }
 
 export function SearchAndNavigateBar({ navigate, search }) {
    const { searchState, setSearchState } = React.useContext(Context)
    const { currentPage, setCurrentPage } = React.useContext(Context)
+   const { paginated } = React.useContext(Context)
    const { paginationRange } = React.useContext(Context)
    const { tasksLength } = React.useContext(Context)
    const [ upperPageBound, setUpperPageBound ] = React.useState(1)
@@ -118,7 +126,7 @@ export function SearchAndNavigateBar({ navigate, search }) {
          maxWidth: "1000px",
          marginBottom: "1em"
       }}>
-         { upperPageBound <= 1 && navigate? <div /> :
+         { paginated ? (upperPageBound <= 1 && navigate? <div /> :
             <span style={{placeItems: "center"}}>
                <button style={{...buttonStyling}}
                disabled={!isValidPage(currentPage - 1)}
@@ -134,7 +142,7 @@ export function SearchAndNavigateBar({ navigate, search }) {
                   <h5>{">"}</h5>
                </button>
             </span>
-         }
+         ) : <div />}
 
          { search && <input
             type="search"

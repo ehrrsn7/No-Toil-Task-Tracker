@@ -230,24 +230,7 @@ export const sortTasksBy = ({ tasks, setTasks }, by) => {
       // default: "id-Ascending"
       by = by == '' ? "id-Ascending" : by
 
-      const sortFunction = {
-         "id-Ascending":               sortFunctions.id.ascending,
-         "id-Descending":              sortFunctions.id.descending,
-         "Title-Ascending":            sortFunctions.Title.ascending,
-         "Title-Descending":           sortFunctions.Title.descending,
-         "Quantity-Ascending":         sortFunctions.Quantity.ascending,
-         "Quantity-Descending":        sortFunctions.Quantity.descending,
-         "Oil-Ascending":              sortFunctions.Oil.ascending,
-         "Oil-Descending":             sortFunctions.Oil.descending,
-         "HighPriority-Ascending":     sortFunctions.HighPriority.ascending,
-         "HighPriority-Descending":    sortFunctions.HighPriority.descending,
-         "Status-Ascending":           sortFunctions.Status.ascending,
-         "Status-Descending":          sortFunctions.Status.descending,
-         "Discarded-Ascending":        sortFunctions.Discarded.ascending,
-         "Discarded-Descending":       sortFunctions.Discarded.descending,
-         "LastModified-Ascending":     sortFunctions.LastModified.ascending,
-         "LastModified-Descending":    sortFunctions.LastModified.descending,
-      }[by]
+      const sortFunction = getSortFunction(by)
 
       setTasks([... // spread operator is necessary to trigger re-render
          (Array.isArray(tasks) ? tasks : objToArray(tasks)).sort(sortFunction)
@@ -256,6 +239,27 @@ export const sortTasksBy = ({ tasks, setTasks }, by) => {
    catch (err) {
       toast(<h5>{err}</h5>)
    }
+}
+
+export function getSortFunction(key) {
+   return {
+      "id-Ascending":               sortFunctions.id.ascending,
+      "id-Descending":              sortFunctions.id.descending,
+      "Title-Ascending":            sortFunctions.Title.ascending,
+      "Title-Descending":           sortFunctions.Title.descending,
+      "Quantity-Ascending":         sortFunctions.Quantity.ascending,
+      "Quantity-Descending":        sortFunctions.Quantity.descending,
+      "Oil-Ascending":              sortFunctions.Oil.ascending,
+      "Oil-Descending":             sortFunctions.Oil.descending,
+      "HighPriority-Ascending":     sortFunctions.HighPriority.ascending,
+      "HighPriority-Descending":    sortFunctions.HighPriority.descending,
+      "Status-Ascending":           sortFunctions.Status.ascending,
+      "Status-Descending":          sortFunctions.Status.descending,
+      "Discarded-Ascending":        sortFunctions.Discarded.ascending,
+      "Discarded-Descending":       sortFunctions.Discarded.descending,
+      "LastModified-Ascending":     sortFunctions.LastModified.ascending,
+      "LastModified-Descending":    sortFunctions.LastModified.descending,
+   }[key]
 }
 
 export const sortFunctions = {
@@ -302,6 +306,7 @@ export const filterFunctions = {
    completedPartsStatus: row => row.Status == 5,
    discardedPartsStatus: row => (row.Discarded || row.Status == 6),
    notDiscardedPartsStatus: row => !(row.Discarded || row.Status == 6),
+   highPriority: row => row.HighPriority,
    unfiltered: row => row,
 }
 

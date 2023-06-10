@@ -24,7 +24,7 @@ export function Oil() {
             showHighPriority
             showLastModified
             showUpdate 
-            paginated
+            isPaginated
             search
             navigate
          />

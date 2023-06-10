@@ -2,12 +2,13 @@ import React from "react"
 import { LayoutGroup, motion } from "framer-motion"
 import { useInitializer, ErrorBoundary } from "ehrrsn7-components"
 import { Context } from "@contexts"
-import { objToArray, sortTasksBy, filterFunctions } from "@utils"
+import { objToArray, filterFunctions } from "@utils"
 import { SearchAndNavigateBar, AccordionRow, TaskRow } from "."
 import "./TaskTable.css"
+import { getSortFunction } from "../../utils"
 
 export function TaskTable({
-   setsOrQuantity, showStatus, showLastModified, showHighPriority, showUpdate, paginated, paginationRangeOverride, search, navigate, discarded
+   setsOrQuantity, showStatus, showLastModified, showHighPriority, showUpdate, isPaginated, paginationRangeOverride, search, navigate, discarded
 }) {
    const { tasks, setTasks } = React.useContext(Context)
    const { tasksLength } = React.useContext(Context)
@@ -17,6 +18,7 @@ export function TaskTable({
    const { searchState } = React.useContext(Context)
    const { filterFunction } = React.useContext(Context)
    const { filterDiscarded } = React.useContext(Context)
+   const { paginated, setPaginated } = React.useContext(Context)
    const { paginationOffset } = React.useContext(Context)
    const { paginationRange, setPaginationRange } = React.useContext(Context)
 
@@ -32,21 +34,14 @@ export function TaskTable({
          .filter(filterFunction)
          .filter(searchStateFilter)
          .filter(discardedFilter)
+         .sort(getSortFunction(sortedBy))
       if (paginated)
          return get()
             .slice(paginationOffset, paginationOffset + paginationRange)
-      return get().filter(discardedFilter)
+      return get()
    }
 
    // handlers
-   const handleTasksSorting = () => {
-      try {
-         if (!tasks) throw "tasks undefined"
-         sortTasksBy({ tasks, setTasks }, sortedBy)
-      }
-      catch (err) { console.warn(err) }
-   }
-
    const handleDiscarded = () => {
       const newDiscarded = discarded || false
       setFilterDiscarded(newDiscarded)
@@ -58,9 +53,12 @@ export function TaskTable({
    }
 
    // on change
+   useInitializer(() => {
+      console.log(isPaginated)
+      setPaginated(isPaginated)
+   })
    useInitializer(handlePaginationRangeOverride)
    useInitializer(handleDiscarded)
-   React.useEffect(handleTasksSorting, [ sortedBy, setTasks ])
 
    // component
    return <ErrorBoundary fallback={<div>

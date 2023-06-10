@@ -28,6 +28,7 @@ export function App() {
 			<Route path="/Check" element={<Pages.Check />} />
 			<Route path="/Oil" element={<Pages.Oil />} />
 			<Route path="/Bag" element={<Pages.Bag />} />
+			<Route path="/HighPriority" element={<Pages.HighPriority />} />
 			<Route path="/CompletedParts" element={
             <Pages.CompletedParts />
          } />

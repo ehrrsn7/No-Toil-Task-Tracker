@@ -24,7 +24,7 @@ export function Check() {
             showHighPriority
             showLastModified
             showUpdate 
-            paginated
+            isPaginated
             search
             navigate
          />

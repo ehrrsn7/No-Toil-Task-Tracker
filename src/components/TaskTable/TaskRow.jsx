@@ -89,7 +89,7 @@ export const TaskRow = {
    }) {
       return <motion.tr initial="hidden" animate="show" 
       id={row.id == updateExpanded ? "updateExpanded" : ''}
-      className={`TaskTableRow-${row.id}`}
+      className={`TaskTableRow ${row.id}`}
       onClick={event => {
          const ignoreMe = [
             "Status", "Update"
@@ -121,7 +121,10 @@ export const TaskRow = {
 
          <HighPriority
          showHighPriority={showHighPriority}>
-            {row.HighPriority ? "!" : ''}
+            {row.HighPriority ?
+               <Link to="HighPriority"><button>!</button></Link> :
+               ''
+            }
          </HighPriority>
 
          <Update row={row} showUpdate={showUpdate} />
@@ -225,7 +228,6 @@ export function HighPriority({ children, showHighPriority }) {
 export function Update({ row, showUpdate }) {
    const { updateExpanded } = React.useContext(Context)
    const { setUpdateExpanded } = React.useContext(Context)
-   const { sortedBy, setSortedBy } = React.useContext(Context)
    const mobile = useMedia(mobileQuery)
 
    const update = () => {
@@ -237,9 +239,6 @@ export function Update({ row, showUpdate }) {
             throw `Invalid new Status: '${newStatus}'`
 
          updateFirebase({ ...row, Status: newStatus })
-            // promises should use a .then and .catch
-            // bug fix: sortedBy would reset and jumble up the order
-            .then(() => setSortedBy(sortedBy))
             .catch(err => { throw err })
       }
       catch (err) {

@@ -12,6 +12,7 @@ export function ContextProvider({ children }) {
    const [ sortedBy, setSortedBy ] = React.useState('')
    const [ connected, setConnected ] = React.useState(null)
    const [ updateExpanded, setUpdateExpanded ] = React.useState('')
+   const [ paginated, setPaginated ] = React.useState(null)
    const [ paginationOffset, setPaginationOffset ] = React.useState(0)
    const [ paginationRange, setPaginationRange ] = React.useState(-1)
    const [ filterFunction, setFilterFunction ] = React.useState(() => row => row)
@@ -45,6 +46,11 @@ export function ContextProvider({ children }) {
 
    const handleFetchTasks = () => {
       fetchTasks({tasks, setTasks, setConnected})
+         .then(() => {
+            setTimeout(() => {
+               setSortedBy("Title-Ascending")
+            }, 2000)
+         })
    }
 
    // initializer caller
@@ -60,6 +66,7 @@ export function ContextProvider({ children }) {
       sortedBy, setSortedBy,
       connected, setConnected,
       updateExpanded, setUpdateExpanded,
+      paginated, setPaginated,
       paginationOffset, setPaginationOffset,
       paginationRange, setPaginationRange,
       filterFunction, setFilterFunction,

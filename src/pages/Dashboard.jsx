@@ -21,7 +21,7 @@ export function Dashboard() {
    const [ showAddTasks, setShowAddTasks ] = React.useState(false)
    const [ showImportCsv, setShowImportCsv ] = React.useState(false)
 
-   const handleTasksSorting = () => setSortedBy("Status-Descending")
+   const handleTasksSorting = () => setSortedBy("Title-Ascending")
    const handleStatusFilter = () => setFilterFunction(row => row)
 
    useInitializer(handleTasksSorting)
@@ -43,7 +43,7 @@ export function Dashboard() {
             showStatus
             showLastModified
             showUpdate 
-            paginated
+            isPaginated
             search
             navigate
          />
@@ -93,7 +93,10 @@ export function Dashboard() {
             {!tablet && <button disabled />}
          </nav>
          <nav id="StatusNavigation">
-            <button disabled style={{ cursor: "default"}} />
+            <Link to="/HighPriority">
+               <button><h5> High Priority </h5></button>
+            </Link>
+            {/* <button disabled style={{ cursor: "default"}} /> */}
             <button disabled style={{ cursor: "default"}}><h5>Back to Dashboard</h5></button>
             <Link to="/Stamp">
                <button><h5> Stamp → </h5></button>

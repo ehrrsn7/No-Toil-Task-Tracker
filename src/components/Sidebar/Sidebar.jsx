@@ -30,6 +30,7 @@ export function Sidebar() {
 
       {[ "Stamp", "Spray", "Check", "Oil", "Bag",
          "CompletedParts", "DiscardedParts",
+         "HighPriority"
       ].map(name =>
          <SidebarLink to={name} key={name} id={`SidebarLink-${name}`}
          className={isCurrentStatus(name) && "Selected"}>

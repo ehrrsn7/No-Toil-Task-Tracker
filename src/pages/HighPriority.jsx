@@ -4,20 +4,20 @@ import { Footer, useInitializer } from "ehrrsn7-components"
 import { Context } from "@contexts"
 import { filterFunctions } from "@utils"
 import { Header, TaskTable, Paginator } from "@components"
-import "./Spray.css"
+import "./HighPriority.css"
 
-export function Spray() {
+export function HighPriority() {
    const { setFilterFunction } = React.useContext(Context)
 
    const handleStatusFilter = () => {
-      setFilterFunction(() => filterFunctions.sprayStatus)
+      setFilterFunction(() => filterFunctions.highPriority)
    }
 
    useInitializer(handleStatusFilter)
-
-   return <div id="Spray" className="Page">
+   
+   return <div id="HighPriority" className="Page">
       <Header>
-         Spray
+         High Priority
       </Header>
       <main id="Content">
          <TaskTable
@@ -32,9 +32,9 @@ export function Spray() {
       <Footer>
          <Paginator />
          <nav id="StatusNavigation">
-            <Link to="/Stamp"><button><h5>← Stamp</h5></button></Link>
+            <button disabled />
             <Link to="/"><button><h5>Back to Dashboard</h5></button></Link>
-            <Link to="/Check"><button><h5>Check →</h5></button></Link>
+            <button disabled />
          </nav>
       </Footer>
    </div>

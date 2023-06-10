@@ -18,6 +18,7 @@ import { toast } from "react-toastify"
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 import firebaseConfig from "../private/firebaseConfig.json"
+import { sortFunctions } from "../utils"
 
 /**********************************************************************
  * Firestore
@@ -46,12 +47,10 @@ export async function post(collectionName="tasks", obj={}) {
 }
 
 // get ('sync')
-export async function onFirestoreSnapshot(
-   collectionName="tasks", callback=()=>{}, errorCallback=()=>{}
-) {
+export async function onFirestoreSnapshot(collectionName="tasks", callback=()=>{}) {
    const ref = collection(db, collectionName)
    const q = query(ref)
-   onSnapshot(q, callback, errorCallback)
+   onSnapshot(q, callback)
 }
 
 export async function update(obj={}, collectionName="tasks") {
@@ -76,21 +75,22 @@ export async function fetchTasks({ tasks, setTasks, setConnected }) {
       })
       // snapshot.docChanges().forEach(change => { console.log(change.type) })
       setTasks(newTasks)
-      setConnected(true)
-   },
-   err => {
-      setConnected(false)
-      toast.error(<>
-         <h5>Error connecting to Firestore.</h5>
-         <p>{err}</p>
-      </>)
    })
+      .then(() => {
+         setTimeout(() => setConnected(true), 500)
+      })
+      .catch(err => {
+         setTimeout(() => setConnected(false), 500)
+         toast.error(<>
+            <h5>Error connecting to Firestore.</h5>
+            <p>{err}</p>
+         </>)
+      })
 }
 
 export async function deleteTask(id="") {
    try {
       await deleteDoc(doc(db, "tasks", id))
-         // .then(result => console.log(result))
          .catch(err => { throw err })
    }
    catch (err) {
@@ -125,7 +125,7 @@ export class Task {
       this.Title = props.Title               || "Unknown Title"
       this.Quantity = props.Quantity         || -1
       this.Status = (props.Status != undefined) ? props.Status : -1
-      this.Description = props.Description   || "Unknown Description"
+      this.Description = props.Description   || ''
       this.Oil = props.Oil                   || false
       this.Discarded = props.Discarded       || false
       this.HighPriority = props.HighPriority || false

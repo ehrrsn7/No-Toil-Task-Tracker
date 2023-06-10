@@ -4,3 +4,8 @@ td#Update {
    place-items: center;
    min-width: 50px;
 }
+
+.TaskTableRow button {
+   margin: .2em .5em;
+   padding: 0 .5em;
+}
