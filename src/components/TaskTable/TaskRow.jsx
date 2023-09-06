@@ -1,6 +1,5 @@
 import React from "react"
 import { Link, useLocation } from "react-router-dom"
-import { motion } from "framer-motion"
 import { toast } from "react-toastify"
 import { separateCamelCase, ErrorBoundary, useMedia } from "ehrrsn7-components"
 import { Context } from "@contexts"
@@ -89,7 +88,7 @@ export const TaskRow = {
    }) {
       const location = useLocation()
 
-      return <motion.tr initial="hidden" animate="show" 
+      return <tr initial="hidden" animate="show" 
       id={row.id == updateExpanded ? "updateExpanded" : ''}
       className={`TaskTableRow ${row.id}`}
       onClick={event => {
@@ -135,7 +134,7 @@ export const TaskRow = {
          </HighPriority>
 
          <Update row={row} showUpdate={showUpdate} />
-      </motion.tr>
+      </tr>
    }
 }
 
