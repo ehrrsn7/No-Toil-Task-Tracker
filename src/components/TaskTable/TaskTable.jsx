@@ -1,5 +1,4 @@
 import React from "react"
-import { LayoutGroup, motion } from "framer-motion"
 import { useInitializer, ErrorBoundary } from "ehrrsn7-components"
 import { Context } from "@contexts"
 import { objToArray, getSortFunction, filterFunctions } from "@utils"
@@ -9,7 +8,7 @@ import "./TaskTable.css"
 export function TaskTable({
    setsOrQuantity, showStatus, showLastModified, showHighPriority, showUpdate, isPaginated, paginationRangeOverride, search, navigate, discarded
 }) {
-   const { tasks, setTasks } = React.useContext(Context)
+   const { tasks } = React.useContext(Context)
    const { tasksLength } = React.useContext(Context)
    const { setFilterDiscarded } = React.useContext(Context)
    const { updateExpanded, setUpdateExpanded } = React.useContext(Context)
@@ -77,7 +76,7 @@ export function TaskTable({
       <tbody>
          {/* No Tasks */}
          { tasksLength <= 0 && 
-            <motion.tr className="NoTasks">
+            <tr className="NoTasks">
                <td colSpan="100%">
                   <span>
                      <p>
@@ -85,13 +84,12 @@ export function TaskTable({
                      </p>
                   </span>
                </td>
-            </motion.tr>
+            </tr>
          }
 
          {/* Tasks */}
          { getTasks()
             .map(row => <React.Fragment key={row.id}>
-            <LayoutGroup initial={false}>
             <TaskRow.Body row={row}
                updateExpanded={updateExpanded}
                setUpdateExpanded={setUpdateExpanded}
@@ -104,7 +102,6 @@ export function TaskTable({
 
          {/* Accordion Row (in line with selected) */}
          { row.id == updateExpanded && <AccordionRow row={row} />}
-         </LayoutGroup>
          </React.Fragment>) }
 
          <tr className="filler-row" />

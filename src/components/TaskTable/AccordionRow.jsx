@@ -1,6 +1,5 @@
 import React from "react"
 import { Link, useLocation } from "react-router-dom"
-import { motion } from "framer-motion"
 import { useMedia } from "react-use"
 import { toast } from "react-toastify"
 import {
@@ -37,7 +36,7 @@ export function AccordionRow({ row }) {
 
    if (!row) return <div>'row' is undefined.</div>
 
-   return <motion.tr className="AccordionRow">
+   return <tr className="AccordionRow">
       <td colSpan="100%" style={{ padding: 0, background: dark && "var(--background-dark-secondary)" }}>
          <MasonryLayout style={{ padding: "1em" }}>
             <MoreInfo row={row} />
@@ -46,7 +45,7 @@ export function AccordionRow({ row }) {
             <Discard row={row} />
          </MasonryLayout>
       </td>
-   </motion.tr>
+   </tr>
 }
 
 export function Card({style, children, id}) {

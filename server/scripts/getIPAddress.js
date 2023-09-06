@@ -1,6 +1,3 @@
-// import path from "path"
-// import process from "process"
-// import { fileURLToPath } from "url"
 import { networkInterfaces } from "os"
 
 export function getIPAddress() {
